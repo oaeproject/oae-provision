@@ -1,0 +1,10 @@
+---
+# tasks file for redis
+- name: Install redis
+  become: yes
+  become_user: root
+  apt:
+    name: redis
+    state: present
+  notify:
+    - start_redis

@@ -1,0 +1,9 @@
+---
+# handlers file for redis
+- name: start_redis
+  become: yes
+  become_user: root
+  service:
+    name: redis
+    state: restarted
+

@@ -1,0 +1,21 @@
+---
+# tasks file for dependencies
+- name: Install packages for building stuff
+  become: yes
+  become_user: root
+  apt:
+    name: build-essential
+    state: present
+    update_cache: true
+- name: Install libreoffice
+  become: yes
+  become_user: root
+  apt:
+    name: libreoffice-base-core
+    state: present
+- name: Install pdftotext
+  become: yes
+  become_user: root
+  apt:
+    name: poppler-utils
+    state: present

@@ -1,0 +1,10 @@
+---
+# vars file for dependencies
+nodenv_env: local
+
+nodenv:
+  plugins:
+    - { name: node-build, repo: 'https://github.com/nodenv/node-build.git' }
+
+nodes:
+  - version: 10.14.2

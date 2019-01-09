@@ -1,0 +1,50 @@
+[staging-web]
+staging.oae.org
+
+[staging-app]
+staging.oae.org
+
+[staging-mq]
+staging.oae.org
+
+[staging-cache]
+staging.oae.org
+
+[staging-db]
+staging.oae.org
+
+[staging-etherpad]
+staging.oae.org
+
+[staging-search]
+staging.oae.org
+
+[esup-web]
+# web0.apereo.org
+# web1.apereo.org
+
+[esup-app]
+# app0.apereo.org
+# app1.apereo.org
+
+[esup-mq]
+# mq0.apereo.org
+# mq1.apereo.org
+
+[esup-cache]
+# cache0.apereo.org
+# cache1.apereo.org
+
+[esup-db]
+# db0.apereo.org
+# db1.apereo.org
+# db2.apereo.org
+
+[esup-etherpad]
+# etherpad0.apereo.org
+# etherpad1.apereo.org
+
+[esup-search]
+# search0.apereo.org
+# search1.apereo.org
+

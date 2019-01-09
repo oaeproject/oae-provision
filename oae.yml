@@ -1,0 +1,32 @@
+-
+    hosts: staging-web
+    roles:
+        - nginx
+-
+    hosts: staging-app
+    roles:
+        - docker
+        - jre
+        - dependencies
+        - node
+        - hilary_setup
+-
+    hosts: staging-mq
+    roles:
+        - rabbitmq
+-
+    hosts: staging-cache
+    roles:
+        - redis
+-
+    hosts: staging-db
+    roles:
+        - jre
+        - cassandra
+-
+    hosts: staging-etherpad
+-
+    hosts: staging-search
+    roles:
+        - elasticsearch
+    remote_user: oae

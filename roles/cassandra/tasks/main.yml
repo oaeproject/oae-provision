@@ -1,0 +1,28 @@
+---
+# tasks file for cassandra
+- name: Download cassandra
+  get_url:
+    url: http://apache.claz.org/cassandra/2.1.20/apache-cassandra-2.1.20-bin.tar.gz
+    dest: /home/oae
+- name: Unarchive cassandra
+  unarchive:
+    remote_src: yes
+    src: /home/oae/apache-cassandra-2.1.20-bin.tar.gz
+    dest: /home/oae
+- name: Install cassandra
+  become: yes
+  become_user: root
+  shell: |
+    mv apache-cassandra-2.1.20 /usr/local/cassandra
+    useradd cassandra
+    groupadd cassandra
+    usermod -aG cassandra cassandra
+    chown root:cassandra -R /usr/local/cassandra/
+    chmod g+w -R /usr/local/cassandra/
+- name: Create cassandra service
+  become: yes
+  become_user: root
+  copy:
+    dest: /etc/systemd/system/
+    src: cassandra.service
+  notify: Start cassandra

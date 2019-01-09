@@ -1,0 +1,13 @@
+---
+# tasks file for elasticsearch
+- name: Download elasticsearch
+  get_url:
+    url: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.deb
+    dest: /home/oae/
+- name: Install elasticsearch
+  become: yes
+  become_user: root
+  apt:
+    deb: elasticsearch-1.7.6.deb
+  notify: Start elasticsearch
+

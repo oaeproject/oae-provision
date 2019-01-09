@@ -1,0 +1,11 @@
+---
+# tasks file for rabbitmq
+- name: Install rabbitmq
+  become: yes
+  become_user: root
+  apt:
+    name: rabbitmq-server
+    state: present
+  notify:
+    - Start rabbitmq
+

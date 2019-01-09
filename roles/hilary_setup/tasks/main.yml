@@ -1,0 +1,51 @@
+---
+# tasks file for oae_stuff
+- name: Create upload folder for Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /opt/tmp/uploads
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Create previews folder Hilary
+  file:
+    path: /opt/tmp/previews
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Create files folder Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /opt/files
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Create folder for Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /opt/Hilary
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Clone the repo
+  git:
+    repo: https://github.com/oaeproject/Hilary
+    depth: 1
+    dest: /opt/Hilary
+    version: master
+
+- name: Install 3akai-ux dependencies
+  shell: |
+    cd /opt/Hilary/3akai-ux && npm install --silent
+
+- name: Install Hilary dependencies
+  shell: |
+    cd /opt/Hilary && npm install --silent
+
