@@ -1,2 +1,20 @@
 ---
 # vars file for nginx
+nginx_user: "nginx"
+nginx_group: "nginx"
+proxy_connect_timeout: 60
+proxy_read_timeout: 60
+
+global_admin_workers: |
+  server  app1.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+  server  app2.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+  server  app3.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+  keepalive 64;
+
+tenant_workers: |
+  server  app1.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+  server  app2.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+  server  app3.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+  keepalive 64;
+
+nginx_ux_home: "/opt/Hilary/3akai-ux"

@@ -6,6 +6,12 @@
   apt:
     name: nginx
     state: present
+- name: Extract and setup latest config
+  become: yes
+  become_user: root
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: 755
   notify:
     - Start nginx
-
