@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "Hilary",
+      "script": "app.js",
+      "cwd": "/opt/Hilary",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "instances": 1,
+      "exec_mode": "cluster",
+      "log_file": "/var/log/Hilary/hilary.log",
+      "error_file": "/var/log/Hilary/hilary-err.log",
+      "ignore_watch": ["test", ".git", "files", "*.log"]
+    }
+  ]
+}
