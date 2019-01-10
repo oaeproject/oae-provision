@@ -48,3 +48,20 @@ staging.oae.org
 # search0.apereo.org
 # search1.apereo.org
 
+[staging:children]
+staging-web
+staging-app
+staging-mq
+staging-cache
+staging-db
+staging-etherpad
+staging-search
+
+[esup:children]
+esup-web
+esup-app
+esup-mq
+esup-cache
+esup-db
+esup-etherpad
+esup-search
