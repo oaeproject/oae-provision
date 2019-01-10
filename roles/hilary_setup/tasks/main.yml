@@ -1,5 +1,3 @@
----
-# tasks file for oae_stuff
 - name: Create upload folder for Hilary
   become: yes
   become_user: root
@@ -8,14 +6,12 @@
     state: directory
     owner: oae
     group: oae
-
 - name: Create previews folder Hilary
   file:
     path: /opt/tmp/previews
     state: directory
     owner: oae
     group: oae
-
 - name: Create files folder Hilary
   become: yes
   become_user: root
@@ -24,7 +20,6 @@
     state: directory
     owner: oae
     group: oae
-
 - name: Create folder for Hilary
   become: yes
   become_user: root
@@ -33,19 +28,72 @@
     state: directory
     owner: oae
     group: oae
-
+- name: Create log folder for Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /var/log/Hilary
+    state: directory
+    owner: oae
+    group: oae
 - name: Clone the repo
   git:
-    repo: https://github.com/oaeproject/Hilary
+    repo: "https://github.com/oaeproject/Hilary"
     depth: 1
+    force: yes
     dest: /opt/Hilary
     version: master
-
 - name: Install 3akai-ux dependencies
   shell: |
     cd /opt/Hilary/3akai-ux && npm install --silent
-
 - name: Install Hilary dependencies
   shell: |
     cd /opt/Hilary && npm install --silent
-
+- name: Build the frontend
+  shell: |
+    cd /opt/Hilary/3akai-ux && npx grunt
+- name: Set configuration
+  shell: |
+    export TMP="/opt/tmp"
+    cd /opt/Hilary
+    printf "\n\nconfig.ui.path = {{ui_path}};"                                             >> config.js
+    printf "\n\nconfig.cassandra.hosts = {{cassandra_hosts}};"                             >> config.js
+    printf "\n\nconfig.cassandra.timeout = {{cassandra_timeout}};"                         >> config.js
+    printf "\n\nconfig.cassandra.replication = {{cassandra_replication}};"                 >> config.js
+    printf "\n\nconfig.redis.host = {{redis_host}};"                                       >> config.js
+    printf "\n\nconfig.servers.serverInternalAddress = {{server_internal_address}};"       >> config.js
+    printf "\n\nconfig.servers.globalAdminHost = {{server_global_admin_host}};"            >> config.js
+    printf "\n\nconfig.servers.guestTenantAlias = {{server_guest_tenant_alias}};"          >> config.js
+    printf "\n\nconfig.servers.guestTenantHost = {{server_guest_tenant_host}};"            >> config.js
+    # printf "\n\nconfig.servers.shibbolethSPHost = '';"                                   >> config.js
+    printf "\n\nconfig.servers.useHttps = {{server_use_https}};"                           >> config.js
+    printf "\n\nconfig.files.tmpDir = {{files_tmpDir}};"                                   >> config.js
+    printf "\n\nconfig.files.uploadDir = {{files_uploadDir}};"                             >> config.js
+    printf "\n\nconfig.files.localStorageDirectory = {{files_localStorageDir}};"           >> config.js
+    printf "\n\nconfig.cookie.secret = {{cookie_secret}};"                                 >> config.js
+    printf "\n\nconfig.search.hosts = {{search_hosts}};"                                   >> config.js
+    printf "\n\nconfig.mq.connection.host = {{mq_connection_host}};"                       >> config.js
+    printf "\n\nconfig.previews.tmpDir = {{previews_tmpDir}};"                             >> config.js
+    printf "\n\nconfig.previews.pdf2htmlEX.binary = {{previews_pdf2htmlEX_binary}};"       >> config.js
+    printf "\n\nconfig.signing.key = {{signing_key}};"                                     >> config.js
+    printf "\n\nconfig.email.debug = {{email_debug}};"                                     >> config.js
+    # printf "\n\nconfig.email.customEmailTemplatesDir = %s;"                              >> config.js
+    # printf "\n\nconfig.email.deduplicationInterval = %s;"                                >> config.js
+    # printf "\n\nconfig.email.throttling.count = %s;"                                     >> config.js
+    # printf "\n\nconfig.email.throttling.timespan = %s;"                                  >> config.js
+    printf "\n\nconfig.email.transport = {{email_transport}};"                             >> config.js
+    # printf "\n\nconfig.email.sendmailTransport.path = \'%s\';"                           >> config.js
+    # printf "\n\nconfig.email.smtpTransport = %O;"                                        >> config.js
+    # printf "\n\nconfig.etherpad.apikey = \'%s\';"                                        >> config.js
+    printf "\n\nconfig.etherpad.apikey = {{etherpad_apikey}};"                             >> config.js
+    printf "\n\nconfig.etherpad.hosts = {{etherpad_hosts}};"                               >> config.js
+    # printf "\n\nconfig.ethercalc.host = \'%s\';"                                         >> config.js
+    printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
+    printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
+- name: Copy PM2 configuration to remote
+  become: yes
+  become_user: root
+  copy:
+    dest: /opt/Hilary
+    src: process.json
+  notify: Start PM2
