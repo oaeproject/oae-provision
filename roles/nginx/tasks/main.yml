@@ -6,7 +6,21 @@
   apt:
     name: nginx
     state: present
-- name: Extract and setup latest config
+- name: Copy the admin nginx configuration
+  become: yes
+  become_user: root
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/admin.vhost.conf
+    mode: 755
+- name: Copy the oae nginx configuration
+  become: yes
+  become_user: root
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/oae.vhost.conf
+    mode: 755
+- name: Copy the main nginx configuration
   become: yes
   become_user: root
   template:
@@ -14,4 +28,4 @@
     dest: /etc/nginx/nginx.conf
     mode: 755
   notify:
-    - Start nginx
+    - Reload nginx

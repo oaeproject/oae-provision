@@ -6,15 +6,34 @@ proxy_connect_timeout: 60
 proxy_read_timeout: 60
 
 global_admin_workers: |
-  server  app1.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
-  server  app2.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
-  server  app3.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+  server  localhost:2001
   keepalive 64;
+# global_admin_workers: |
+# server  app1.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+# server  app2.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+# server  app3.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
+# keepalive 64;
 
 tenant_workers: |
-  server  app1.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
-  server  app2.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
-  server  app3.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+  server  localhost:2001
   keepalive 64;
+# tenant_workers: |
+# server  app1.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+# server  app2.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+# server  app3.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
+# keepalive 64;
 
-nginx_ux_home: "/opt/Hilary/3akai-ux"
+error_log_dir: "/var/log/nginx/error.log"
+access_log_dir: "/var/log/nginx/access.log"
+nginx_ux_home: "/opt/Hilary/3akai-ux/target/optimized"
+nginx_local_file_storage: "/opt/files"
+
+admin_host_server_name: "admin.staging.oar.org"
+# admin_host_server_name: "admin.oae.esup-portail.org"
+oae_host_server_name: "oae.staging.oae.org"
+# oae_host_server_name: "oae.univ-littoral.fr"
+
+etherpad_host1: "http://localhost"
+# etherpad_host1: "http://ether1.oae.esup-portail.org"
+etherpad_host2: "http://localhost"
+# etherpad_host2: "http://ether2.oae.esup-portail.org"
