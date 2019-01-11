@@ -54,6 +54,12 @@
     cd /opt/Hilary/3akai-ux && npx grunt
 - name: Set configuration
   shell: |
+    export TWITTER_KEY=vuMy7DqnfPkHPrHE3eqkWp3uG
+    export TWITTER_SECRET=coPAXA5Vsngt4k9ehHbmvRiG7qX0VKLBG47U0oJja2PkEYyOET
+    export FACEBOOK_APP_ID=194758077323671
+    export FACEBOOK_APP_SECRET=663d14e7f9ad0baeb4e43390825a659f
+    export GOOGLE_CLIENT_ID=822036948319.apps.googleusercontent.com
+    export GOOGLE_CLIENT_SECRET=b5ccr5noy0j_gzj4kj42uuwm
     export TMP="/opt/tmp"
     cd /opt/Hilary
     printf "\n\nconfig.ui.path = {{ui_path}};"                                             >> config.js
