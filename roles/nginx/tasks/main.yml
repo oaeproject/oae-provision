@@ -6,19 +6,27 @@
   apt:
     name: nginx
     state: present
+- name: Create folder for OAE nginx configuration
+  become: yes
+  become_user: root
+  file:
+    path: /etc/nginx/oae.conf.d
+    state: directory
+    owner: oae
+    group: oae
 - name: Copy the admin nginx configuration
   become: yes
   become_user: root
   template:
     src: nginx.conf
-    dest: /etc/nginx/admin.vhost.conf
+    dest: /etc/nginx/oae.conf.d/admin.vhost.conf
     mode: 755
 - name: Copy the oae nginx configuration
   become: yes
   become_user: root
   template:
     src: nginx.conf
-    dest: /etc/nginx/oae.vhost.conf
+    dest: /etc/nginx/oae.conf.d/oae.vhost.conf
     mode: 755
 - name: Copy the main nginx configuration
   become: yes
