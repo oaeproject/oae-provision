@@ -3,5 +3,4 @@
 - name: Start cassandra
   service:
     name: cassandra
-    state: started
-
+    state: reloaded
