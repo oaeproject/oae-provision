@@ -1,0 +1,15 @@
+---
+# vars file for etherpad
+etherpad_version: "1.6.3"
+etherpad_path: "/opt/etherpad"
+etherpad_path_log: "/var/log/etherpad"
+cassandra_hosts: ["localhost"]
+cassandra_keyspace: "oae"
+cassandra_replication_factor: 1
+mq_hosts: "localhost"
+api_key: "'13SirapH8t3kxUh5T5aqWXhXahMzoZRA'"
+
+# not yet being used
+etherpad_user: oae
+etherpad_group: oae
+cassandra_port: 9160

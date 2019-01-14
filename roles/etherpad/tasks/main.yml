@@ -1,0 +1,138 @@
+---
+# tasks file for etherpad
+- name: Install etherpad dependencies
+  become: yes
+  become_user: root
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - build-essential
+      - checkinstall
+      - libreadline-gplv2-dev
+      - libncursesw5-dev
+      - libssl-dev
+      - libsqlite3-dev
+      - tk-dev
+      - libgdbm-dev
+      - libc6-dev
+      - libbz2-dev
+    state: present
+#- name: Install python
+#  get_url:
+#    url: https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
+#    dest: /home/oae
+#- name: Unarchive python 2.7.14
+#  unarchive:
+#    remote_src: yes
+#    src: /home/oae/Python-2.7.14.tgz
+#    dest: /home/oae
+#- name: Compile python
+#  become: yes
+#  become_user: root
+#  shell: |
+#    cd /home/oae/Python-2.7.14
+#    ./configure --enable-optimizations
+#    make altinstall
+- name: Create etherpad root folder
+  become: yes
+  become_user: root
+  file:
+    path: "/opt"
+    state: directory
+    owner: oae
+    group: oae
+- name: Create etherpad dir
+  become: yes
+  become_user: root
+  file:
+    path: "{{ etherpad_path }}"
+    state: directory
+    owner: oae
+    group: oae
+- name: Create etherpad log dir
+  become: yes
+  become_user: root
+  file:
+    path: "{{ etherpad_path_log }}"
+    state: directory
+    owner: oae
+    group: oae
+- name: Download etherpad
+  get_url:
+    url: https://github.com/ether/etherpad-lite/archive/{{ etherpad_version }}.tar.gz
+    dest: /home/oae/
+- name: Unarchive etherpad
+  unarchive:
+    list_files: yes
+    remote_src: yes
+    src: /home/oae/etherpad-lite-{{ etherpad_version }}.tar.gz
+    dest: /home/oae
+- name: Set up etherpad
+  shell: |
+    mv /home/oae/etherpad-lite-{{ etherpad_version }}/* {{ etherpad_path }}
+    # sed -i -e "93 s,grep.*,grep -E -o 'v[0-9]\.[0-9](\.[0-9])?')," {{ etherpad_path }}/bin/installDeps.sh
+    # sed -i -e '96 s,if.*,if [ "${VERSION#v}" = "$NEEDED_VERSION" ]; then,' {{ etherpad_path }}/bin/installDeps.sh
+    {{ etherpad_path }}/bin/installDeps.sh
+- name: Copy settings.json file
+  become: yes
+  become_user: root
+  template:
+    src: settings.json
+    dest: /opt/etherpad/settings.json
+    mode: 777
+- name: Install ep_headings module
+  shell: |
+    cd {{ etherpad_path }}
+    npm install ep_headings
+- name: Install ep_comments module
+  shell: |
+    cd {{ etherpad_path }}
+    npm install ep_page_view
+    git clone https://github.com/oaeproject/ep_comments.git node_modules/ep_comments_page \
+    cd node_modules/ep_comments_page
+    npm install
+- name: Etherpad OAE plugin
+  shell: |
+    cd {{ etherpad_path }}/node_modules
+    git clone https://github.com/oaeproject/ep_oae
+    cd ep_oae
+    npm install
+- name: CSS changes
+  shell: |
+    rm {{ etherpad_path }}/node_modules/ep_headings/templates/editbarButtons.ejs
+    cp {{ etherpad_path }}/node_modules/ep_oae/static/templates/editbarButtons.ejs {{ etherpad_path }}/node_modules/ep_headings/templates/editbarButtons.ejs
+    rm {{ etherpad_path }}/src/static/custom/pad.css
+    cp {{ etherpad_path }}/node_modules/ep_oae/static/css/pad.css {{ etherpad_path }}/src/static/custom/pad.css
+- name: Install python and pip
+  become: yes
+  become_user: root
+  apt:
+    name: python-pip
+    state: present
+- name: We need to run a specific cqlsh command before this works
+  shell: |
+    pip install cqlsh==4.0.1
+    pip install thrift==0.9.3
+    echo "CREATE KEYSPACE IF NOT EXISTS \"{{ cassandra_keyspace }}\" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': {{ cassandra_replication_factor }} };" >> {{ etherpad_path }}/init.cql
+    chown oae:oae {{ etherpad_path }}/init.cql
+  #shell: |
+  #cqlsh -f {{ etherpad_path }}/init.cql {{ item }} 9160
+  #with_items:
+  #- "{{ cassandra_hosts }}"
+#- name: Initilize keyspace
+- name: Initilize keyspace
+  shell: |
+    cqlsh -f {{ etherpad_path }}/init.cql {{ item }} 9160
+  with_items:
+    - "{{ cassandra_hosts }}"
+- name: Must add the same key as config.js
+  shell: |
+    echo "{{ api_key }}" > {{etherpad_path }}/APIKEY.txt
+- name: Create etherpad service
+  become: yes
+  become_user: root
+  template:
+    dest: /etc/systemd/system/
+    src: etherpad.service
+    mode: 700
