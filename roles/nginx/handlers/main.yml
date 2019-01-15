@@ -1,6 +1,9 @@
 ---
 # handlers file for nginx
-- name: Reload nginx
-  service:
-    name: nginx
-    state: reloaded
+- name: Set up the certificate
+  become: yes
+  become_user: root
+  shell: |
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt
+    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+  when: first_time == true

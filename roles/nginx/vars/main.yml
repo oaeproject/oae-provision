@@ -1,12 +1,12 @@
 ---
 # vars file for nginx
-nginx_user: "nginx"
-nginx_group: "nginx"
+nginx_user: "oae"
+nginx_group: "oae"
 proxy_connect_timeout: 60
 proxy_read_timeout: 60
 
 global_admin_workers: |
-  server  localhost:2001
+  server  localhost:2001;
   keepalive 64;
 # global_admin_workers: |
 # server  app1.oae.esup-portail.org:2000  max_fails=3  fail_timeout=30s;
@@ -15,7 +15,7 @@ global_admin_workers: |
 # keepalive 64;
 
 tenant_workers: |
-  server  localhost:2001
+  server  localhost:2001;
   keepalive 64;
 # tenant_workers: |
 # server  app1.oae.esup-portail.org:2001  max_fails=3     fail_timeout=30s;
@@ -33,7 +33,7 @@ admin_host_server_name: "admin.staging.oar.org"
 oae_host_server_name: "oae.staging.oae.org"
 # oae_host_server_name: "oae.univ-littoral.fr"
 
-etherpad_host1: "http://localhost"
+etherpad_host0: "http://localhost"
 # etherpad_host1: "http://ether1.oae.esup-portail.org"
-etherpad_host2: "http://localhost"
+etherpad_host1: "http://localhost"
 # etherpad_host2: "http://ether2.oae.esup-portail.org"

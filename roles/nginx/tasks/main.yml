@@ -18,22 +18,26 @@
   become: yes
   become_user: root
   template:
-    src: nginx.conf
+    src: admin.vhost.conf
     dest: /etc/nginx/oae.conf.d/admin.vhost.conf
-    mode: 0755
+    mode: 0777
 - name: Copy the oae nginx configuration
   become: yes
   become_user: root
   template:
-    src: nginx.conf
+    src: oae.vhost.conf
     dest: /etc/nginx/oae.conf.d/oae.vhost.conf
-    mode: 0755
+    mode: 0777
 - name: Copy the main nginx configuration
   become: yes
   become_user: root
   template:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
-    mode: 0755
-  notify:
-    - Reload nginx
+    mode: 0777
+- name: Reload nginx
+  become: yes
+  become_user: root
+  service:
+    name: nginx
+    state: reloaded
