@@ -1,13 +1,14 @@
 [Unit]
 Description=Etherpad-lite, the collaborative editor.
 After=syslog.target network.target
+Requires=network-online.target
 
 [Service]
 Type=simple
 User={{ etherpad_user }}
 Group={{ etherpad_group }}
 WorkingDirectory={{ etherpad_path }}
-ExecStart=/usr/bin/nodejs {{ etherpad_path }}/node_modules/ep_etherpad-lite/node/server.js
+ExecStart={{ etherpad_path }}/bin/run.sh
 Restart=always
 
 [Install]

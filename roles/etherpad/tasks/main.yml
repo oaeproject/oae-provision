@@ -80,7 +80,7 @@
   template:
     src: settings.json
     dest: /opt/etherpad/settings.json
-    mode: 777
+    mode: 0755
 - name: Install ep_headings module
   shell: |
     cd {{ etherpad_path }}
@@ -135,4 +135,5 @@
   template:
     dest: /etc/systemd/system/
     src: etherpad.service
-    mode: 700
+    mode: 0755
+  notify: Start etherpad

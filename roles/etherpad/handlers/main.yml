@@ -1,2 +1,8 @@
 ---
 # handlers file for etherpad
+- name: Start etherpad
+  become: yes
+  become_user: root
+  service:
+    name: etherpad
+    state: restarted

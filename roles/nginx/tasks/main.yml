@@ -20,20 +20,20 @@
   template:
     src: nginx.conf
     dest: /etc/nginx/oae.conf.d/admin.vhost.conf
-    mode: 755
+    mode: 0755
 - name: Copy the oae nginx configuration
   become: yes
   become_user: root
   template:
     src: nginx.conf
     dest: /etc/nginx/oae.conf.d/oae.vhost.conf
-    mode: 755
+    mode: 0755
 - name: Copy the main nginx configuration
   become: yes
   become_user: root
   template:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
-    mode: 755
+    mode: 0755
   notify:
     - Reload nginx
