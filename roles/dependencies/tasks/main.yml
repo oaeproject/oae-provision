@@ -11,7 +11,7 @@
   become: yes
   become_user: root
   apt:
-    name: libreoffice-base-core
+    name: libreoffice-base
     state: present
 - name: Install pdftotext
   become: yes
