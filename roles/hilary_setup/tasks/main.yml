@@ -32,7 +32,8 @@
   become: yes
   become_user: root
   file:
-    path: /var/log/Hilary
+    path: /var/log/Hilary/
+    recurse: yes
     state: directory
     owner: oae
     group: oae
