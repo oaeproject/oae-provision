@@ -25,4 +25,10 @@
   copy:
     dest: /etc/systemd/system/
     src: cassandra.service
-  notify: Start cassandra
+    mode: 0755
+- name: Restart cassandra
+  become: yes
+  become_user: root
+  service:
+    name: cassandra
+    state: restarted
