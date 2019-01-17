@@ -109,11 +109,11 @@
     npm i pm2
 - name: Scale down PM2
   shell: |
-    pm2 scale -s Hilary 1 /dev/null && sleep 5 ; echo $?
-    sleep 70
-    pm2 startOrReload -s Hilary
+    npx pm2 scale -s Hilary 1 /dev/null
     sleep 30
-    pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null ; echo $?
+    npx pm2 startOrReload -s Hilary
+    sleep 30
+    npx pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null
 - name: Start PM2
   shell: |
     npx pm2 start /opt/Hilary/process.json 
