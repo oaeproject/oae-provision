@@ -1,6 +1,5 @@
 - hosts: staging-db
   roles:
-    - jre
     - cassandra
 - hosts: staging-mq
   roles:
@@ -18,7 +17,6 @@
 - hosts: staging-app
   roles:
     - docker
-    - jre
     - dependencies
     - node
     - hilary_setup

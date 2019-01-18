@@ -1,8 +1,0 @@
----
-# tasks file for jre
-- name: Install JRE
-  become: yes
-  become_user: root
-  apt:
-    name: openjdk-8-jre-headless
-    state: present
