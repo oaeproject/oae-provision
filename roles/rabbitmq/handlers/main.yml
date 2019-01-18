@@ -1,6 +1,2 @@
 ---
 # handlers file for rabbitmq
-- name: Start rabbitmq
-  service:
-    name: rabbitmq-server
-    state: restarted
