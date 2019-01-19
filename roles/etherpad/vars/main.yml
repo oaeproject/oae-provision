@@ -1,5 +1,7 @@
 ---
 # vars file for etherpad
+first_run: "false"
+
 etherpad_version: "1.6.3"
 etherpad_path: "/opt/etherpad"
 etherpad_path_log: "/var/log/etherpad"

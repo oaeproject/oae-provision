@@ -1,6 +1,15 @@
 ---
 # tasks file for etherpad
-- name: Install etherpad dependencies
+- name: create etherpad user and group
+  become: yes
+  become_user: root
+  shell: |
+    useradd etherpad
+    groupadd etherpad
+    usermod -aG etherpad etherpad
+  when: first_run == "true"
+
+- name: Install etherpad system dependencies
   become: yes
   become_user: root
   apt:
@@ -18,6 +27,7 @@
       - libc6-dev
       - libbz2-dev
     state: present
+  when: first_run == "true"
 #- name: Install python
 #  get_url:
 #    url: https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
@@ -34,6 +44,7 @@
 #    cd /home/oae/Python-2.7.14
 #    ./configure --enable-optimizations
 #    make altinstall
+
 - name: Create etherpad root folder
   become: yes
   become_user: root
@@ -42,6 +53,8 @@
     state: directory
     owner: oae
     group: oae
+  when: first_run == "true"
+
 - name: Create etherpad dir
   become: yes
   become_user: root
@@ -50,6 +63,8 @@
     state: directory
     owner: oae
     group: oae
+  when: first_run == "true"
+
 - name: Create etherpad log dir
   become: yes
   become_user: root
@@ -58,33 +73,53 @@
     state: directory
     owner: oae
     group: oae
+  when: first_run == "true"
+
 - name: Download etherpad
   get_url:
     url: https://github.com/ether/etherpad-lite/archive/{{ etherpad_version }}.tar.gz
     dest: /home/oae/
+  when: first_run == "true"
+
 - name: Unarchive etherpad
   unarchive:
     list_files: yes
     remote_src: yes
     src: /home/oae/etherpad-lite-{{ etherpad_version }}.tar.gz
     dest: /home/oae
+  when: first_run == "true"
+
 - name: Set up etherpad
+  become: yes
+  become_user: root
   shell: |
     mv /home/oae/etherpad-lite-{{ etherpad_version }}/* {{ etherpad_path }}
     # sed -i -e "93 s,grep.*,grep -E -o 'v[0-9]\.[0-9](\.[0-9])?')," {{ etherpad_path }}/bin/installDeps.sh
     # sed -i -e '96 s,if.*,if [ "${VERSION#v}" = "$NEEDED_VERSION" ]; then,' {{ etherpad_path }}/bin/installDeps.sh
+    chown oae:oae -R {{ etherpad_path }}
+    chmod g+w -R {{ etherpad_path }}
+  when: first_run == "true"
+
+- name: Install etherpad dependencies
+  shell: |
     {{ etherpad_path }}/bin/installDeps.sh
+  when: first_run == "true"
+
 - name: Copy settings.json file
-  become: yes
-  become_user: root
   template:
     src: settings.json
     dest: /opt/etherpad/settings.json
     mode: 0755
+    group: oae
+    owner: oae
+  when: first_run == "true"
+
 - name: Install ep_headings module
   shell: |
     cd {{ etherpad_path }}
     npm install ep_headings
+  when: first_run == "true"
+
 - name: Install ep_comments module
   shell: |
     cd {{ etherpad_path }}
@@ -92,25 +127,35 @@
     git clone https://github.com/oaeproject/ep_comments.git node_modules/ep_comments_page \
     cd node_modules/ep_comments_page
     npm install
+  when: first_run == "true"
+
 - name: Etherpad OAE plugin
   shell: |
     cd {{ etherpad_path }}/node_modules
     git clone https://github.com/oaeproject/ep_oae
     cd ep_oae
     npm install
+  when: first_run == "true"
+
 - name: CSS changes
   shell: |
     rm {{ etherpad_path }}/node_modules/ep_headings/templates/editbarButtons.ejs
     cp {{ etherpad_path }}/node_modules/ep_oae/static/templates/editbarButtons.ejs {{ etherpad_path }}/node_modules/ep_headings/templates/editbarButtons.ejs
     rm {{ etherpad_path }}/src/static/custom/pad.css
     cp {{ etherpad_path }}/node_modules/ep_oae/static/css/pad.css {{ etherpad_path }}/src/static/custom/pad.css
+  when: first_run == "true"
+
 - name: Install python and pip
   become: yes
   become_user: root
   apt:
     name: python-pip
     state: present
+  when: first_run == "true"
+
 - name: We need to run a specific cqlsh command before this works
+  become: yes
+  become_user: root
   shell: |
     pip install cqlsh==4.0.1
     pip install thrift==0.9.3
@@ -121,14 +166,20 @@
   #with_items:
   #- "{{ cassandra_hosts }}"
 #- name: Initilize keyspace
+  when: first_run == "true"
+
 - name: Initilize keyspace
   shell: |
     cqlsh -f {{ etherpad_path }}/init.cql {{ item }} 9160
   with_items:
     - "{{ cassandra_hosts }}"
+  when: first_run == "true"
+
 - name: Must add the same key as config.js
   shell: |
     echo "{{ api_key }}" > {{etherpad_path }}/APIKEY.txt
+  when: first_run == "true"
+
 - name: Create etherpad service
   become: yes
   become_user: root
@@ -136,4 +187,20 @@
     dest: /etc/systemd/system/
     src: etherpad.service
     mode: 0755
-  notify: Start etherpad
+  when: first_run == "true"
+
+- name: is etherpad already running?
+  become: yes
+  become_user: root
+  shell: service etherpad status warn=false
+  register: etherpad_status
+  failed_when: etherpad_status.rc != 0 and ("unrecognized service" not in etherpad_status.stderr)
+  ignore_errors: true
+
+- name: Restart etherpad
+  become: yes
+  become_user: root
+  service:
+    name: etherpad
+    state: restarted
+  when: "etherpad_status.rc != 0"
