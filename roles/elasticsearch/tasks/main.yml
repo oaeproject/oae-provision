@@ -4,10 +4,25 @@
   get_url:
     url: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.deb
     dest: /home/oae/
+  when: first_run == "true"
 - name: Install elasticsearch
   become: yes
   become_user: root
   apt:
     deb: elasticsearch-1.7.6.deb
-  notify: Start elasticsearch
+  when: first_run == "true"
 
+- name: is elasticsearch already running?
+  become: yes
+  become_user: root
+  shell: service elasticsearch status warn=false
+  register: elasticsearch_status
+  failed_when: elasticsearch_status.rc != 0 and ("unrecognized service" not in elasticsearch_status.stderr)
+  ignore_errors: true
+- name: Restart elasticsearch
+  become: yes
+  become_user: root
+  service:
+    name: elasticsearch
+    state: restarted
+  when: "elasticsearch_status.rc != 0"
