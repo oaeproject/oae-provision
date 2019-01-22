@@ -1,5 +1,7 @@
 ---
 # vars file for nginx
+env: "staging"
+ssl_cert_fqdn: "staging.oae.org"
 nginx_user: "oae"
 nginx_group: "oae"
 proxy_connect_timeout: 60

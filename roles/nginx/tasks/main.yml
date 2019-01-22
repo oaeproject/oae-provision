@@ -6,6 +6,7 @@
   apt:
     name: nginx
     state: present
+
 - name: Create folder for OAE nginx configuration
   become: yes
   become_user: root
@@ -14,6 +15,7 @@
     state: directory
     owner: oae
     group: oae
+
 - name: Copy the admin nginx configuration
   become: yes
   become_user: root
@@ -21,6 +23,7 @@
     src: admin.vhost.conf
     dest: /etc/nginx/oae.conf.d/admin.vhost.conf
     mode: 0777
+
 - name: Copy the oae nginx configuration
   become: yes
   become_user: root
@@ -28,6 +31,7 @@
     src: oae.vhost.conf
     dest: /etc/nginx/oae.conf.d/oae.vhost.conf
     mode: 0777
+
 - name: Copy the main nginx configuration
   become: yes
   become_user: root
@@ -35,6 +39,25 @@
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
     mode: 0777
+
+- name: Copy the certificate config
+  become: yes
+  become_user: root
+  template:
+    src: certificate.conf
+    dest: /etc/nginx/certificate.conf
+    mode: 0777
+    owner: oae
+    group: oae
+
+- name: Create the SSL certificate
+  become: yes
+  become_user: root
+  shell: |
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt -config /etc/nginx/certificate.conf -subj "/C=FR/ST=Paris/L=Paris/O=IT/CN={{ ssl_cert_fqdn }}"
+    openssl dhparam -out /etc/nginx/dhparam.pem 2048
+  when: env == "staging"
+
 - name: Reload nginx
   become: yes
   become_user: root
