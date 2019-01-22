@@ -1,18 +1,28 @@
 - hosts: staging-db
   roles:
     - cassandra
+  tags:
+    - cassandra
 - hosts: staging-mq
   roles:
+    - rabbitmq
+  tags:
     - rabbitmq
 - hosts: staging-etherpad
   roles:
     - node
     - etherpad
+  tags:
+    - etherpad
 - hosts: staging-cache
   roles:
     - redis
+  tags:
+    - redis
 - hosts: staging-search
   roles:
+    - elasticsearch
+  tags:
     - elasticsearch
 - hosts: staging-app
   roles:
@@ -20,7 +30,11 @@
     - dependencies
     - node
     - hilary_setup
+  tags:
+    - app
   remote_user: oae
 - hosts: staging-web
   roles:
+    - nginx
+  tags:
     - nginx
