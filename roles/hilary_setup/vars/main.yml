@@ -1,3 +1,6 @@
+first_run: "false"
+hilary_user: "oae"
+
 ui_path: "3akai-ux/target/optimized"
 cassandra_hosts: "['localhost']"
 cassandra_timeout: 6000
@@ -23,3 +26,5 @@ etherpad_apikey: "'apikey'"
 etherpad_hosts: "[{host: 'localhost',port: 9001}]"
 previews_enabled: "true"
 previews_credentials_password: "'administrator'"
+
+pm2_scale_timeout: 15

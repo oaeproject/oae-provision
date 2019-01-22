@@ -7,18 +7,24 @@
     name: build-essential
     state: present
     update_cache: true
+
 - name: Install JRE
   become: yes
   become_user: root
   apt:
     name: openjdk-8-jre-headless
     state: present
+
 - name: Install libreoffice
   become: yes
   become_user: root
   apt:
-    name: libreoffice-base
+    name: 
+      - libreoffice-core
+      - libreoffice-base-core
+      - libreoffice-writer
     state: present
+
 - name: Install pdftotext
   become: yes
   become_user: root

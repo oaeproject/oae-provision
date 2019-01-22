@@ -4,30 +4,33 @@
   file:
     path: /opt/tmp/uploads
     state: directory
-    owner: oae
-    group: oae
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
 - name: Create previews folder Hilary
   file:
     path: /opt/tmp/previews
     state: directory
-    owner: oae
-    group: oae
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
 - name: Create files folder Hilary
   become: yes
   become_user: root
   file:
     path: /opt/files
     state: directory
-    owner: oae
-    group: oae
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
 - name: Create folder for Hilary
   become: yes
   become_user: root
   file:
     path: /opt/Hilary
     state: directory
-    owner: oae
-    group: oae
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
 - name: Create log folder for Hilary
   become: yes
   become_user: root
@@ -35,8 +38,9 @@
     path: /var/log/Hilary/
     recurse: yes
     state: directory
-    owner: oae
-    group: oae
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
 - name: Clone the repo
   git:
     repo: "https://github.com/oaeproject/Hilary"
@@ -44,24 +48,21 @@
     force: yes
     dest: /opt/Hilary
     version: master
+
 - name: Install 3akai-ux dependencies
   shell: |
     cd /opt/Hilary/3akai-ux && npm install --silent
+
 - name: Install Hilary dependencies
   shell: |
     cd /opt/Hilary && npm install --silent
+
 - name: Build the frontend
   shell: |
     cd /opt/Hilary/3akai-ux && npx grunt
+
 - name: Set configuration
   shell: |
-    export TWITTER_KEY=vuMy7DqnfPkHPrHE3eqkWp3uG
-    export TWITTER_SECRET=coPAXA5Vsngt4k9ehHbmvRiG7qX0VKLBG47U0oJja2PkEYyOET
-    export FACEBOOK_APP_ID=194758077323671
-    export FACEBOOK_APP_SECRET=663d14e7f9ad0baeb4e43390825a659f
-    export GOOGLE_CLIENT_ID=822036948319.apps.googleusercontent.com
-    export GOOGLE_CLIENT_SECRET=b5ccr5noy0j_gzj4kj42uuwm
-    export TMP="/opt/tmp"
     cd /opt/Hilary
     printf "\n\nconfig.ui.path = '{{ui_path}}';"                                             >> config.js
     printf "\n\nconfig.cassandra.hosts = {{cassandra_hosts}};"                             >> config.js
@@ -97,23 +98,44 @@
     # printf "\n\nconfig.ethercalc.host = \'%s\';"                                         >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
+
 - name: Copy PM2 configuration to remote
-  become: yes
-  become_user: root
   copy:
     dest: /opt/Hilary
     src: process.json
+
+- name: Copy production.js to production
+  copy:
+    dest: /opt/Hilary
+    src: production.js
+
 - name: Install PM2
+  become: yes
+  become_user: root
+  shell: |
+    npm i -g pm2
+
+- name: Scale down PM2 to a single process
   shell: |
     cd /opt/Hilary
-    npm i pm2
-- name: Scale down PM2
+    pm2 scale -s Hilary 1 /dev/null ; echo $?
+
+- name: Start (or reload) PM2
   shell: |
-    npx pm2 scale -s Hilary 1 /dev/null
-    sleep 30
-    npx pm2 startOrReload -s Hilary
-    sleep 30
-    npx pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null
-- name: Start PM2
+    cd /opt/Hilary
+    export TWITTER_KEY=vuMy7DqnfPkHPrHE3eqkWp3uG
+    export TWITTER_SECRET=coPAXA5Vsngt4k9ehHbmvRiG7qX0VKLBG47U0oJja2PkEYyOET
+    export FACEBOOK_APP_ID=194758077323671
+    export FACEBOOK_APP_SECRET=663d14e7f9ad0baeb4e43390825a659f
+    export GOOGLE_CLIENT_ID=822036948319.apps.googleusercontent.com
+    export GOOGLE_CLIENT_SECRET=b5ccr5noy0j_gzj4kj42uuwm
+    export TMP="/opt/tmp"
+    pm2 startOrReload process.json 
+
+- name: Scale up PM2
   shell: |
-    npx pm2 start /opt/Hilary/process.json 
+    cd /opt/Hilary
+    echo "Sleeping after reloading Hilary..."
+    sleep {{ pm2_scale_timeout }}
+    pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null
+    echo "Scaling up to more processes..."
