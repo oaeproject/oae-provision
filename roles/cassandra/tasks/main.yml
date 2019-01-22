@@ -1,43 +1,29 @@
 ---
 # tasks file for jre
-- name: Install JRE for cassandra
+- name: Add cassandra apt key
   become: yes
   become_user: root
-  apt:
-    name: openjdk-8-jre-headless
+  apt_key:
+    url: https://www.apache.org/dist/cassandra/KEYS
+    id: A278B781FE4B2BDA
     state: present
-  when: first_run == "true"
-# tasks file for cassandra
-- name: Download cassandra
-  get_url:
-    url: http://apache.claz.org/cassandra/2.1.20/apache-cassandra-2.1.20-bin.tar.gz
-    dest: /home/oae
-  when: first_run == "true"
-- name: Unarchive cassandra
-  unarchive:
-    remote_src: yes
-    src: /home/oae/apache-cassandra-2.1.20-bin.tar.gz
-    dest: /home/oae
-  when: first_run == "true"
+  register: add_repository_key
+  ignore_errors: "{{ cassandra_apt_ignore_key_error }}"
+
+- name: Add cassandra repository.
+  become: yes
+  become_user: root
+  apt_repository:
+    repo: "{{ cassandra_apt_repository }}"
+    state: present
+    update_cache: true
+
 - name: Install cassandra
   become: yes
   become_user: root
-  shell: |
-    mv apache-cassandra-2.1.20 /usr/local/cassandra
-    useradd cassandra
-    groupadd cassandra
-    usermod -aG cassandra cassandra
-    chown root:cassandra -R /usr/local/cassandra/
-    chmod g+w -R /usr/local/cassandra/
-  when: first_run == "true"
-- name: Create cassandra service
-  become: yes
-  become_user: root
-  copy:
-    dest: /etc/systemd/system/
-    src: cassandra.service
-    mode: 0755
-  when: first_run == "true"
+  apt:
+    name: cassandra
+    state: present
 
 - name: is cassandra already running?
   become: yes
@@ -46,6 +32,7 @@
   register: cassandra_status
   failed_when: cassandra_status.rc != 0 and ("unrecognized service" not in cassandra_status.stderr)
   ignore_errors: true
+
 - name: Restart cassandra
   become: yes
   become_user: root
