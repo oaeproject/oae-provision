@@ -1,16 +1,25 @@
 ---
 # tasks file for elasticsearch
+- name: Check if elasticsearch has been installed
+  become: yes
+  become_user: root
+  shell: |
+    apt list --installed | grep elasticsearch
+  register: elastic_installed
+  ignore_errors: true
+
 - name: Download elasticsearch
   get_url:
     url: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.deb
     dest: /home/oae/
-  when: first_run == "true"
+  when: elastic_installed.rc == 1
+
 - name: Install elasticsearch
   become: yes
   become_user: root
   apt:
     deb: elasticsearch-1.7.6.deb
-  when: first_run == "true"
+  when: elastic_installed.rc == 1
 
 - name: is elasticsearch already running?
   become: yes
@@ -19,6 +28,7 @@
   register: elasticsearch_status
   failed_when: elasticsearch_status.rc != 0 and ("unrecognized service" not in elasticsearch_status.stderr)
   ignore_errors: true
+
 - name: Restart elasticsearch
   become: yes
   become_user: root
