@@ -1,2 +1,3 @@
 ---
 # vars file for node
+node_version: 'v10.15.0'
