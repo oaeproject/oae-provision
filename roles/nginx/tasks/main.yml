@@ -56,7 +56,7 @@
   shell: |
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt -config /etc/nginx/certificate.conf -subj "/C=FR/ST=Paris/L=Paris/O=IT/CN={{ ssl_cert_fqdn }}"
     openssl dhparam -out /etc/nginx/dhparam.pem 2048
-  when: env == "staging"
+  when: create_cert == true
 
 - name: Reload nginx
   become: yes
@@ -64,3 +64,4 @@
   service:
     name: nginx
     state: reloaded
+    enabled: true
