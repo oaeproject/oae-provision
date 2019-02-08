@@ -6,6 +6,7 @@
     state: directory
     owner: "{{ hilary_user }}"
     group: "{{ hilary_user }}"
+
 - name: Create previews folder Hilary
   file:
     path: /opt/tmp/previews
@@ -41,10 +42,25 @@
     owner: "{{ hilary_user }}"
     group: "{{ hilary_user }}"
 
+- name: Install system dependencies for Hilary
+  become: yes
+  become_user: root
+  apt:
+    name: 
+      - libreoffice-core
+      - libreoffice-base-core
+      - libreoffice-writer
+      - graphicsmagick
+      - poppler-utils
+      - openjdk-8-jre-headless
+      - build-essential
+    state: present
+    update_cache: true
+
 - name: Clone the repo
   git:
     repo: "https://github.com/oaeproject/Hilary"
-    depth: 1
+    depth: 5
     force: yes
     dest: /opt/Hilary
     version: master
@@ -75,6 +91,7 @@
     printf "\n\nconfig.servers.guestTenantHost = {{server_guest_tenant_host}};"            >> config.js
     # printf "\n\nconfig.servers.shibbolethSPHost = '';"                                   >> config.js
     printf "\n\nconfig.servers.useHttps = {{server_use_https}};"                           >> config.js
+    printf "\n\nconfig.servers.strictHttps = {{server_strict_https}};"                           >> config.js
     printf "\n\nconfig.files.tmpDir = {{files_tmpDir}};"                                   >> config.js
     printf "\n\nconfig.files.uploadDir = {{files_uploadDir}};"                             >> config.js
     printf "\n\nconfig.files.localStorageDirectory = {{files_localStorageDir}};"           >> config.js
@@ -115,10 +132,20 @@
   shell: |
     npm i -g pm2
 
+- name: Initialize PM2
+  shell: |
+    pm2 ping
+
+- name: Check if there are PM2 processes running
+  shell: |
+    pm2 prettylist -m
+  register: pm2_proc_list
+
 - name: Scale down PM2 to a single process
   shell: |
     cd /opt/Hilary
     pm2 scale -s Hilary 1 /dev/null ; echo $?
+  when: pm2_proc_list.stdout != no_processes
 
 - name: Start (or reload) PM2
   shell: |
@@ -135,7 +162,5 @@
 - name: Scale up PM2
   shell: |
     cd /opt/Hilary
-    echo "Sleeping after reloading Hilary..."
     sleep {{ pm2_scale_timeout }}
     pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null
-    echo "Scaling up to more processes..."

@@ -1,4 +1,3 @@
-first_run: "false"
 hilary_user: "oae"
 
 ui_path: "3akai-ux/target/optimized"
@@ -11,6 +10,8 @@ server_global_admin_host: "'admin.staging.oae.org'"
 server_guest_tenant_alias: "'guest'"
 server_guest_tenant_host: "'guest.staging.oae.org'"
 server_use_https: "true"
+# in production change to true
+server_strict_https: "false"
 files_tmpDir: "'/opt/tmp'"
 files_uploadDir: "'/opt/tmp/uploadDir'"
 files_localStorageDir: "'/opt/files'"
@@ -28,3 +29,4 @@ previews_enabled: "true"
 previews_credentials_password: "'administrator'"
 
 pm2_scale_timeout: 15
+no_processes: '[]'
