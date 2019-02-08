@@ -35,23 +35,6 @@
       - libbz2-dev
     state: present
 
-#- name: Install python
-#  get_url:
-#    url: https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tgz
-#    dest: /home/oae
-#- name: Unarchive python 2.7.14
-#  unarchive:
-#    remote_src: yes
-#    src: /home/oae/Python-2.7.14.tgz
-#    dest: /home/oae
-#- name: Compile python
-#  become: yes
-#  become_user: root
-#  shell: |
-#    cd /home/oae/Python-2.7.14
-#    ./configure --enable-optimizations
-#    make altinstall
-
 - name: Create etherpad root folder
   become: yes
   become_user: root
@@ -204,4 +187,5 @@
   service:
     name: etherpad
     state: restarted
+    enabled: true
   when: "etherpad_status.rc != 0"

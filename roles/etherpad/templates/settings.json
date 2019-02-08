@@ -38,7 +38,7 @@
     "clientOptions": {
       "keyspace": "{{ cassandra_keyspace }}",
       "port": 9160,
-      "contactPoints": {{ cassandra_hosts }}
+      "contactPoints": {{ cassandra_hosts | to_json }} 
     },
     "columnFamily": "Etherpad"
   },
@@ -190,7 +190,11 @@
         "outdent"
       ]
     ],
-    "right": [["showusers"]]
+    "right": [
+      [
+        "showusers"
+      ]
+    ]
   },
   // Disable indentation on new line when previous line ends with some special chars (':', '[', '(', '{')
   /*
