@@ -35,4 +35,5 @@
   service:
     name: elasticsearch
     state: restarted
+    enabled: true
   when: "elasticsearch_status.rc != 0"
