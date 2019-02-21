@@ -46,7 +46,7 @@
   become: yes
   become_user: root
   apt:
-    name: 
+    name:
       - libreoffice-core
       - libreoffice-base-core
       - libreoffice-writer
@@ -56,6 +56,11 @@
       - build-essential
     state: present
     update_cache: true
+
+- name: Download PPA
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+  when: node_installed.rc != 0 or (node_installed.rc == 0 and node_installed.stdout != node_version)
 
 - name: Clone the repo
   git:
@@ -97,9 +102,9 @@
     printf "\n\nconfig.files.localStorageDirectory = {{files_localStorageDir}};"           >> config.js
     printf "\n\nconfig.cookie.secret = {{cookie_secret}};"                                 >> config.js
     printf "\n\nconfig.search.hosts = {{search_hosts}};"                                   >> config.js
+    printf "\n\nconfig.search.index.destroyOnStartup = {{search_destroy}};"                >> config.js
     printf "\n\nconfig.mq.connection.host = {{mq_connection_host}};"                       >> config.js
     printf "\n\nconfig.previews.tmpDir = {{previews_tmpDir}};"                             >> config.js
-    printf "\n\nconfig.previews.pdf2htmlEX.binary = {{previews_pdf2htmlEX_binary}};"       >> config.js
     printf "\n\nconfig.signing.key = {{signing_key}};"                                     >> config.js
     printf "\n\nconfig.email.debug = {{email_debug}};"                                     >> config.js
     # printf "\n\nconfig.email.customEmailTemplatesDir = %s;"                              >> config.js
@@ -132,21 +137,6 @@
   shell: |
     npm i -g pm2
 
-- name: Initialize PM2
-  shell: |
-    pm2 ping
-
-- name: Check if there are PM2 processes running
-  shell: |
-    pm2 prettylist -m
-  register: pm2_proc_list
-
-- name: Scale down PM2 to a single process
-  shell: |
-    cd /opt/Hilary
-    pm2 scale -s Hilary 1 /dev/null ; echo $?
-  when: pm2_proc_list.stdout != no_processes
-
 - name: Start (or reload) PM2
   shell: |
     cd /opt/Hilary
@@ -159,8 +149,14 @@
     export TMP="/opt/tmp"
     pm2 startOrReload process.json 
 
-- name: Scale up PM2
+- name: Save PM2 session
   shell: |
-    cd /opt/Hilary
-    sleep {{ pm2_scale_timeout }}
-    pm2 scale Hilary $(grep -c processor /proc/cpuinfo) /dev/null
+    pm2 startOrReload process.json
+    pm2 save
+
+- name: Make PM2 restart on boot
+  become: yes
+  become_user: root
+  shell: |
+    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u oae --hp /home/oae
+    systemctl enable pm2-oae
