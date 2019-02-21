@@ -1,5 +1,4 @@
 ---
-# tasks file for jre
 - name: Add cassandra apt key
   become: yes
   become_user: root
