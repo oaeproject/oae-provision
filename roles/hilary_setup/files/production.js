@@ -32,4 +32,11 @@ config.test = {
   path: './tests.log'
 };
 
+process.env.TWITTER_KEY = "vuMy7DqnfPkHPrHE3eqkWp3uG";
+process.env.TWITTER_SECRET = 'coPAXA5Vsngt4k9ehHbmvRiG7qX0VKLBG47U0oJja2PkEYyOET';
+process.env.FACEBOOK_APP_ID = 194758077323671;
+process.env.FACEBOOK_APP_SECRET = '663d14e7f9ad0baeb4e43390825a659f';
+process.env.GOOGLE_CLIENT_ID = '822036948319.apps.googleusercontent.com';
+process.env.GOOGLE_CLIENT_SECRET = 'b5ccr5noy0j_gzj4kj42uuwm';
+
 module.exports = { config };
