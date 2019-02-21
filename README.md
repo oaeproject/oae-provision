@@ -2,17 +2,11 @@
 
 ## Requirements
 
-TODO
+- Node (tested with 10.15.1)
+- Ansible
 
 ## Usage
 
-TODO
+First, be sure to look at the `hosts` file and make sure you have it adapted to your environment.
 
-## Acknowledgements
-
-Thanks to these roles that have been incorporated:
-
-- https://github.com/geerlingguy/ansible-role-docker.git
-- https://github.com/eventtus/ansible-role-nodenv.git
-
-One day these should be properly forked and included as submodules. One day.
+Then, run `ansible-playbook -i hosts oae.yml --ask-become-pass -v && say "finished deploying"` and it will ask for the sudo password. The `say` command is optional, of course.
