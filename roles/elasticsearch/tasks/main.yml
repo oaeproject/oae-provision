@@ -1,5 +1,14 @@
 ---
 # tasks file for elasticsearch
+- name: Install system dependencies for elasticsearch
+  become: yes
+  become_user: root
+  apt:
+    name: 
+      - openjdk-8-jre-headless
+    state: present
+    update_cache: true
+
 - name: Check if elasticsearch has been installed
   become: yes
   become_user: root
