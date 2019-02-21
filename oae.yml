@@ -30,10 +30,7 @@
     - elasticsearch
 
 - hosts: staging-app
-  vars:
-    docker_users: ["oae"]
   roles:
-    - docker
     - node
     - hilary_setup
   tags:
