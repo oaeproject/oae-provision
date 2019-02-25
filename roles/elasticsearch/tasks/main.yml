@@ -4,7 +4,7 @@
   become: yes
   become_user: root
   apt:
-    name: 
+    name:
       - openjdk-8-jre-headless
     state: present
     update_cache: true
@@ -29,6 +29,14 @@
   apt:
     deb: elasticsearch-1.7.6.deb
   when: elastic_installed.rc == 1
+
+- name: Set elasticsearch configuration
+  become: yes
+  become_user: root
+  shell: |
+    cd /etc/elasticsearch
+    printf "network.host: 0.0.0.0" >> elasticsearch.yml
+  when: production == true
 
 - name: is elasticsearch already running?
   become: yes
