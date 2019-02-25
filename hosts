@@ -20,31 +20,28 @@ staging.oae.org
 staging.oae.org
 
 [esup-web]
-# web0.apereo.org
-# web1.apereo.org
+staging.oae.org # 192.168.38.93
 
 [esup-app]
-# app0.apereo.org
-# app1.apereo.org
+hilary1.prod.oae.org # 192.168.38.94
+hilary2.prod.oae.org # 192.168.38.95
 
 [esup-mq]
-# mq0.apereo.org
-# mq1.apereo.org
+rabbit.prod.oae.org # 192.168.38.90
 
 [esup-cache]
-# cache0.apereo.org
-# cache1.apereo.org
+redis.prod.oae.org # 192.168.38.91
 
 [esup-db]
-# db0.apereo.org
-# db1.apereo.org
-# db2.apereo.org
+cassandra1.prod.oae.org # 96
+cassandra2.prod.oae.org # 97
+cassandra3.prod.oae.org # 98
 
 [esup-etherpad]
-# etherpad0.apereo.org
-# etherpad1.apereo.org
+etherpad.prod.oae.org # 192.168.38.92
 
 [esup-search]
+staging.oae.org
 # search0.apereo.org
 # search1.apereo.org
 
