@@ -7,6 +7,14 @@
     name: redis
     state: present
 
+- name: Set redis configuration
+  become: yes
+  become_user: root
+  shell: |
+    cd /etc/redis
+    printf "\n\nbind 0.0.0.0" >> redis.conf
+  when: production == true
+
 - name: is redis already running?
   become: yes
   become_user: root
