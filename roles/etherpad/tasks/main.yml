@@ -13,7 +13,7 @@
   user:
     name: etherpad
     groups: # Empty by default, here we give it some groups
-     - etherpad
+      - etherpad
     state: present
 
 - name: Install etherpad system dependencies
@@ -61,7 +61,7 @@
     state: directory
     owner: oae
     group: oae
-  
+
 - name: Check if etherpad has been installed
   stat:
     path: "{{ etherpad_path }}/bin"
@@ -154,10 +154,7 @@
 - name: Initilize keyspace
   shell: |
     echo "CREATE KEYSPACE IF NOT EXISTS \"{{ cassandra_keyspace }}\" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': {{ cassandra_replication_factor }} };" >> {{ etherpad_path }}/init.cql
-    cqlsh -f {{ etherpad_path }}/init.cql {{ item }} 9160
-  with_items:
-    - "{{ cassandra_hosts }}"
-  when: etherpad_installed.stat.exists == false
+    cqlsh -f {{ etherpad_path }}/init.cql {{ any_cassandra_host }} 9160
 
 - name: Must add the same key as config.js
   shell: |
@@ -176,7 +173,7 @@
 - name: is etherpad already running?
   become: yes
   become_user: root
-  shell: service etherpad status warn=false
+  shell: sytemctl status etherpad
   register: etherpad_status
   failed_when: etherpad_status.rc != 0 and ("unrecognized service" not in etherpad_status.stderr)
   ignore_errors: true

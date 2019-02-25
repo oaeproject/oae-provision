@@ -46,7 +46,7 @@
   "defaultPadText": "",
   "ep_oae": {
     "mq": {
-      "host": "{{ mq_hosts }}",
+      "host": "{{ mq_hosts | to_json }}",
       "port": 5672
     }
   },
