@@ -7,6 +7,14 @@
     name: rabbitmq-server
     state: present
 
+- name: Set rabbitmq configuration
+  become: yes
+  become_user: root
+  shell: |
+    cd /etc/rabbitmq
+    printf "[{rabbit, [{loopback_users, []}]}]." >> rabbitmq.config
+  when: production == true
+
 - name: is rabbitmq-server already running?
   become: yes
   become_user: root
