@@ -9,7 +9,7 @@
   register: add_repository_key
   ignore_errors: "{{ cassandra_apt_ignore_key_error }}"
 
-- name: Add cassandra repository.
+- name: Add cassandra repository
   become: yes
   become_user: root
   apt_repository:
@@ -24,7 +24,15 @@
     name: cassandra
     state: present
 
-- name: is cassandra already running?
+- name: Copy the cassandra.yaml configuration file
+  become: yes
+  become_user: root
+  template:
+    src: cassandra.yaml
+    dest: /etc/cassandra/cassandra.yaml
+    mode: 0755
+
+- name: Checking whether is cassandra already running?
   become: yes
   become_user: root
   shell: service cassandra status warn=false

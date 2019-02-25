@@ -2,3 +2,6 @@
 # vars file for cassandra
 cassandra_apt_ignore_key_error: true
 cassandra_apt_repository: "deb http://www.apache.org/dist/cassandra/debian 21x main"
+
+# for production only
+cluster_name: Test Cluster
