@@ -1,10 +1,8 @@
 hilary_user: "oae"
 
 ui_path: "3akai-ux/target/optimized"
-cassandra_hosts: "['localhost']"
 cassandra_timeout: 6000
 cassandra_replication: 1
-redis_host: "'localhost'"
 server_internal_address: "'127.0.0.1'"
 server_global_admin_host: "'admin.staging.oae.org'"
 server_guest_tenant_alias: "'guest'"
@@ -16,9 +14,7 @@ files_tmpDir: "'/opt/tmp'"
 files_uploadDir: "'/opt/tmp/uploadDir'"
 files_localStorageDir: "'/opt/files'"
 cookie_secret: "'wJDrU6LxHghggPhpc8unWw82vbM8qvOVzDfYzCGE'"
-search_hosts: "[{host: 'localhost',port: 9200}]"
 search_destroy: "false"
-mq_connection_host: "['localhost']"
 previews_tmpDir: "'/opt/tmp/previews'"
 # previews_pdf2htmlEX_binary: "'docker-compose run --rm oae-pdf2htmlex pdf2htmlEX'"
 signing_key: "'wxwwxcwxWXCWCdd'"
@@ -28,6 +24,3 @@ etherpad_apikey: "'apikey'"
 etherpad_hosts: "[{host: 'localhost',port: 9001}]"
 previews_enabled: "true"
 previews_credentials_password: "'administrator'"
-
-pm2_scale_timeout: 15
-no_processes: '[]'

@@ -78,32 +78,28 @@
   shell: |
     cd /opt/Hilary && npm install --silent
 
-- name: Build the frontend
-  shell: |
-    cd /opt/Hilary/3akai-ux && npx grunt
-
-- name: Set configuration
+- name: Set Hilary configuration
   shell: |
     cd /opt/Hilary
-    printf "\n\nconfig.ui.path = '{{ui_path}}';"                                             >> config.js
-    printf "\n\nconfig.cassandra.hosts = {{cassandra_hosts}};"                             >> config.js
+    printf "\n\nconfig.ui.path = '{{ui_path}}';"                                           >> config.js
+    printf "\n\nconfig.cassandra.hosts = [ {{ cassandra_hosts }} ];" >> config.js
     printf "\n\nconfig.cassandra.timeout = {{cassandra_timeout}};"                         >> config.js
     printf "\n\nconfig.cassandra.replication = {{cassandra_replication}};"                 >> config.js
-    printf "\n\nconfig.redis.host = {{redis_host}};"                                       >> config.js
+    printf "\n\nconfig.redis.host = {{redis_hosts}};"                                    >> config.js
     printf "\n\nconfig.servers.serverInternalAddress = {{server_internal_address}};"       >> config.js
     printf "\n\nconfig.servers.globalAdminHost = {{server_global_admin_host}};"            >> config.js
     printf "\n\nconfig.servers.guestTenantAlias = {{server_guest_tenant_alias}};"          >> config.js
     printf "\n\nconfig.servers.guestTenantHost = {{server_guest_tenant_host}};"            >> config.js
     # printf "\n\nconfig.servers.shibbolethSPHost = '';"                                   >> config.js
     printf "\n\nconfig.servers.useHttps = {{server_use_https}};"                           >> config.js
-    printf "\n\nconfig.servers.strictHttps = {{server_strict_https}};"                           >> config.js
+    printf "\n\nconfig.servers.strictHttps = {{server_strict_https}};"                     >> config.js
     printf "\n\nconfig.files.tmpDir = {{files_tmpDir}};"                                   >> config.js
     printf "\n\nconfig.files.uploadDir = {{files_uploadDir}};"                             >> config.js
     printf "\n\nconfig.files.localStorageDirectory = {{files_localStorageDir}};"           >> config.js
     printf "\n\nconfig.cookie.secret = {{cookie_secret}};"                                 >> config.js
-    printf "\n\nconfig.search.hosts = {{search_hosts}};"                                   >> config.js
+    printf "\n\nconfig.search.hosts = [ {{ search_hosts }} ];" >> config.js
     printf "\n\nconfig.search.index.destroyOnStartup = {{search_destroy}};"                >> config.js
-    printf "\n\nconfig.mq.connection.host = {{mq_connection_host}};"                       >> config.js
+    printf "\n\nconfig.mq.connection.host = [ {{ mq_hosts }} ];"                           >> config.js
     printf "\n\nconfig.previews.tmpDir = {{previews_tmpDir}};"                             >> config.js
     printf "\n\nconfig.signing.key = {{signing_key}};"                                     >> config.js
     printf "\n\nconfig.email.debug = {{email_debug}};"                                     >> config.js
@@ -120,6 +116,10 @@
     # printf "\n\nconfig.ethercalc.host = \'%s\';"                                         >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
+
+- name: Build the frontend
+  shell: |
+    cd /opt/Hilary/3akai-ux && npx grunt
 
 - name: Copy PM2 configuration to remote
   copy:
