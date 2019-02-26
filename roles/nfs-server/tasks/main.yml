@@ -1,0 +1,41 @@
+---
+# tasks file for dependencies
+
+- name: Install Server nfs
+  become: yes
+  become_user: root
+  apt:
+    name:
+        - nfs-kernel-server
+    state: present
+update_cache: true
+
+#Creating the Share Directories on the Host
+ - name: Create folder for storage  hilary files
+  become: yes
+  become_user: root
+  file:
+    path: /storage
+    state: directory
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
+- name: Create files folder Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /storage/files
+    state: directory
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
+
+- name: Create exports file.
+  become: yes
+  become_user: root
+  template:
+    dest: /etc/exports
+    src: exports.j2
+    mode: 0644
+  when: first_run == "true"
+

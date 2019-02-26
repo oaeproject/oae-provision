@@ -1,0 +1,20 @@
+---
+# tasks file for dependencies
+
+- name: Install Client nfs
+  become: yes
+  become_user: root
+  apt:
+    name:
+        - nfs-common
+    state: present
+update_cache: true
+
+- name: configure /etc/fstab on clients
+become: yes
+become_user: root
+shell: |
+    cat "SERVER_NFS:/storage/file /opt/file nfs nfs defaults 0 2" >>/etc/fstab
+    mount -all
+
+  
