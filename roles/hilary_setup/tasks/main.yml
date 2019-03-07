@@ -117,6 +117,12 @@
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
 
+- name: Run migrations
+  shell: |
+    cd /opt/Hilary
+    npm run migrate
+  run_once: true
+
 - name: Build the frontend
   shell: |
     cd /opt/Hilary/3akai-ux && npx grunt
@@ -151,7 +157,7 @@
 
 - name: Save PM2 session
   shell: |
-    pm2 startOrReload process.json
+    cd /opt/Hilary
     pm2 save
 
 - name: Make PM2 restart on boot
