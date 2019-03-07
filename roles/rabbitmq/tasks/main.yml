@@ -10,10 +10,10 @@
 - name: Set rabbitmq configuration
   become: yes
   become_user: root
-  shell: |
-    cd /etc/rabbitmq
-    printf "[{rabbit, [{loopback_users, []}]}]." >> rabbitmq.config
-  when: production == true
+  template:
+    src: rabbitmq.config
+    dest: /etc/rabbitmq/rabbitmq.config
+    mode: 0755
 
 - name: is rabbitmq-server already running?
   become: yes
