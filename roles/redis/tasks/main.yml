@@ -10,10 +10,10 @@
 - name: Set redis configuration
   become: yes
   become_user: root
-  shell: |
-    cd /etc/redis
-    printf "\n\nbind 0.0.0.0" >> redis.conf
-  when: production == true
+  template:
+    src: redis.conf
+    dest: /etc/redis/redis.conf
+    mode: 0755
 
 - name: is redis already running?
   become: yes
