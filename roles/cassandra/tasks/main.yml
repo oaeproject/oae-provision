@@ -32,6 +32,14 @@
     dest: /etc/cassandra/cassandra.yaml
     mode: 0755
 
+- name: Copy the cassandra rack configuration file
+  become: yes
+  become_user: root
+  template:
+    src: cassandra-rackdc.properties
+    dest: /etc/cassandra/cassandra-rackdc.properties
+    mode: 0755
+
 - name: Checking whether is cassandra already running?
   become: yes
   become_user: root
