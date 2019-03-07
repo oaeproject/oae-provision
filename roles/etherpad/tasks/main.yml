@@ -64,7 +64,7 @@
 
 - name: Check if etherpad has been installed
   stat:
-    path: "{{ etherpad_path }}/bin"
+    path: "/etc/systemd/system/etherpad.service"
   register: etherpad_installed
 
 - name: Download etherpad

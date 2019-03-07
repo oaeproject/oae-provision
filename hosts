@@ -38,12 +38,12 @@ cassandra2.prod.oae.org # 97
 cassandra3.prod.oae.org # 98
 
 [esup-etherpad]
-etherpad.prod.oae.org # 192.168.38.92
+etherpad1.prod.oae.org # 192.168.38.92
+etherpad2.prod.oae.org # 192.168.38.101
 
 [esup-search]
-staging.oae.org
-# search0.apereo.org
-# search1.apereo.org
+elastic1.prod.oae.org # 192.168.38.102 
+elastic2.prod.oae.org # 192.168.168.38.103
 
 [staging:children]
 staging-web
