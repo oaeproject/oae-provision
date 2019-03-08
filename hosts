@@ -1,23 +1,23 @@
 [staging-web]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-app]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-mq]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-cache]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-db]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-etherpad]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [staging-search]
-staging.oae.org
+staging.oae.org # 192.168.38.93
 
 [esup-web]
 staging.oae.org # 192.168.38.93
@@ -45,6 +45,14 @@ etherpad2.prod.oae.org # 192.168.38.101
 elastic1.prod.oae.org # 192.168.38.102 
 elastic2.prod.oae.org # 192.168.168.38.103
 
+[esup-nfs-client]
+hilary1.prod.oae.org # 192.168.38.94
+hilary2.prod.oae.org # 192.168.38.95
+staging.oae.org # 192.168.38.93
+
+[esup-nfs-server]
+nfs.prod.oae.org # 192.168.38.93
+
 [staging:children]
 staging-web
 staging-app
@@ -62,3 +70,5 @@ esup-cache
 esup-db
 esup-etherpad
 esup-search
+esup-nfs-client
+esup-nfs-server

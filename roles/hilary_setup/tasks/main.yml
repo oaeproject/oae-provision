@@ -14,15 +14,6 @@
     owner: "{{ hilary_user }}"
     group: "{{ hilary_user }}"
 
-- name: Create files folder Hilary
-  become: yes
-  become_user: root
-  file:
-    path: /opt/files
-    state: directory
-    owner: "{{ hilary_user }}"
-    group: "{{ hilary_user }}"
-
 - name: Create folder for Hilary
   become: yes
   become_user: root

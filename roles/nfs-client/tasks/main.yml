@@ -1,20 +1,26 @@
 ---
-# tasks file for dependencies
-
 - name: Install Client nfs
   become: yes
   become_user: root
   apt:
     name:
-        - nfs-common
+      - nfs-common
     state: present
-update_cache: true
+    update_cache: true
 
-- name: configure /etc/fstab on clients
-become: yes
-become_user: root
-shell: |
-    cat "SERVER_NFS:/storage/file /opt/file nfs nfs defaults 0 2" >>/etc/fstab
+- name: Create files folder Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /opt/files
+    state: directory
+    owner: "{{ hilary_user }}"
+    group: "{{ hilary_user }}"
+
+- name: Configure /etc/fstab on clients
+  become: yes
+  become_user: root
+  shell: |
+    echo "{{ nfs_server }}:/opt/files /opt/files nfs defaults 0 2" >> /etc/fstab
     mount -all
-
-  
+  when: "create_nfs_mount == true"

@@ -8,5 +8,4 @@
 # /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 
-#note for all host hilary and web add file !!!!!
-/storage	esup-app1(rw,sync,no_root_squash,no_subtree_check) esup-app2(rw,sync,no_root_squash,no_subtree_check) esup-web(rw,sync,no_root_squash,no_subtree_check)
+/opt/files {% for host in hilary_hosts %}{{ hostvars[host]['ansible_default_ipv4']['address'] }}(rw,sync,no_root_squash,no_subtree_check) {% endfor %} {% for host in nginx_hosts %}{{ hostvars[host]['ansible_default_ipv4']['address'] }}(rw,sync,no_root_squash,no_subtree_check) {% endfor %}
