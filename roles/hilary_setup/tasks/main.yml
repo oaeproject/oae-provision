@@ -61,10 +61,6 @@
     dest: /opt/Hilary
     version: master
 
-- name: Install 3akai-ux dependencies
-  shell: |
-    cd /opt/Hilary/3akai-ux && npm install --silent
-
 - name: Install Hilary dependencies
   shell: |
     cd /opt/Hilary && npm install --silent
@@ -76,7 +72,7 @@
     printf "\n\nconfig.cassandra.hosts = [ {{ cassandra_hosts }} ];" >> config.js
     printf "\n\nconfig.cassandra.timeout = {{cassandra_timeout}};"                         >> config.js
     printf "\n\nconfig.cassandra.replication = {{cassandra_replication}};"                 >> config.js
-    printf "\n\nconfig.redis.host = {{redis_hosts}};"                                    >> config.js
+    printf "\n\nconfig.redis.host = {{redis_hosts}};"                                      >> config.js
     printf "\n\nconfig.servers.serverInternalAddress = {{server_internal_address}};"       >> config.js
     printf "\n\nconfig.servers.globalAdminHost = {{server_global_admin_host}};"            >> config.js
     printf "\n\nconfig.servers.guestTenantAlias = {{server_guest_tenant_alias}};"          >> config.js
@@ -103,7 +99,7 @@
     # printf "\n\nconfig.email.smtpTransport = %O;"                                        >> config.js
     # printf "\n\nconfig.etherpad.apikey = \'%s\';"                                        >> config.js
     printf "\n\nconfig.etherpad.apikey = {{etherpad_apikey}};"                             >> config.js
-    printf "\n\nconfig.etherpad.hosts = {{etherpad_hosts}};"                               >> config.js
+    printf "\n\nconfig.etherpad.hosts = [{{ etherpad_hosts }}];"                             >> config.js
     # printf "\n\nconfig.ethercalc.host = \'%s\';"                                         >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
@@ -113,10 +109,6 @@
     cd /opt/Hilary
     npm run migrate
   run_once: true
-
-- name: Build the frontend
-  shell: |
-    cd /opt/Hilary/3akai-ux && npx grunt
 
 - name: Copy PM2 configuration to remote
   copy:

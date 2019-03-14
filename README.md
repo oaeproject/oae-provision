@@ -16,14 +16,14 @@ For staging, run `ansible-playbook -i hosts oae.yml --ask-become-pass -v && say 
 For production, use the `esup.yml` file as follows:
 
 ```
-ansible-playbook -i hosts esup.yml --ask-become-pass -v && say "finished deploying"
+ansible-playbook -i hosts esup.yml --ask-become-pass && say "finished deploying"
 ```
 
 ## Before you deploy
 
 Make sure all the variables in the `/roles/server/vars/` are accurate. For example:
 
-In `roles/nginx/vars/main.yml` you'll find variables such as `create_cert: false` that control whether to create an SSL cert for nginx after install. You just need for the first time.
+In `esup.yml` you'll find variables such as `create_cert: false` that controls whether to create an SSL cert for nginx after install or `create_nfs_mount: false` that creates the nfs mount for 3akai-ux and Hilary to share files. You probably just need both these variables set the first time.
 
 Sometimes you'll see this too:
 

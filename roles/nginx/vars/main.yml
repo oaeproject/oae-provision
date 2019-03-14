@@ -1,6 +1,5 @@
 ---
 # vars file for nginx
-create_cert: true
 ssl_cert_fqdn: "staging.oae.org"
 nginx_user: "oae"
 nginx_group: "oae"

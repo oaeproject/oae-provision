@@ -7,6 +7,31 @@
     name: nginx
     state: present
 
+- name: Create folder for Hilary
+  become: yes
+  become_user: root
+  file:
+    path: /opt/Hilary
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+
+- name: Clone the repo
+  git:
+    repo: "https://github.com/oaeproject/Hilary"
+    depth: 5
+    force: yes
+    dest: /opt/Hilary
+    version: master
+
+- name: Install 3akai-ux dependencies
+  shell: |
+    cd /opt/Hilary/3akai-ux && npm install --silent
+
+- name: Build the frontend
+  shell: |
+    cd /opt/Hilary/3akai-ux && npx grunt
+
 - name: Create folder for OAE nginx configuration
   become: yes
   become_user: root
