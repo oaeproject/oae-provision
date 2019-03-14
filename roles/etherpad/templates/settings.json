@@ -38,7 +38,7 @@
     "clientOptions": {
       "keyspace": "{{ cassandra_keyspace }}",
       "port": 9160,
-      "contactPoints": {{ cassandra_hosts | to_json }} 
+      "contactPoints": {{ cassandra_hosts | to_json }}
     },
     "columnFamily": "Etherpad"
   },
@@ -46,7 +46,7 @@
   "defaultPadText": "",
   "ep_oae": {
     "mq": {
-      "host": "{{ mq_hosts | to_json }}",
+      "host": {{ mq_hosts | to_json }},
       "port": 5672
     }
   },
