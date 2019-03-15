@@ -105,12 +105,6 @@
     group: oae
     owner: oae
 
-- name: Rebuild APIKEY file
-  shell: |
-    cd {{ etherpad_path }}
-    rm -rf APIKEY.txt
-    echo "{{ etherpad_apikey }}" >> APIKEY.txt
-
 - name: Install ep_headings module
   shell: |
     cd {{ etherpad_path }}
@@ -163,10 +157,10 @@
     cqlsh -f {{ etherpad_path }}/init.cql {{ cassandra_hosts | first }} 9160
   run_once: true
 
-- name: Must add the same key as config.js
+- name: Rebuild APIKEY file
   shell: |
-    echo "{{ api_key }}" > {{etherpad_path }}/APIKEY.txt
-  when: etherpad_installed.stat.exists == false
+    rm -rf {{ etherpad_path }}/APIKEY.txt
+    echo "{{ etherpad_apikey }}" >> {{ etherpad_path }}/APIKEY.txt
 
 - name: Create etherpad service
   become: yes
