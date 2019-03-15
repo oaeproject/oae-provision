@@ -177,19 +177,10 @@
     mode: 0755
   when: etherpad_installed.stat.exists == false
 
-- name: is etherpad already running?
-  become: yes
-  become_user: root
-  shell: sytemctl status etherpad
-  register: etherpad_status
-  failed_when: etherpad_status.rc != 0 and ("unrecognized service" not in etherpad_status.stderr)
-  ignore_errors: true
-
 - name: Restart etherpad
   become: yes
   become_user: root
   service:
     name: etherpad
-    state: restarted
+    state: started
     enabled: true
-  when: "etherpad_status.rc != 0"

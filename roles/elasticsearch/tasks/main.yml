@@ -38,19 +38,10 @@
     printf "network.host: 0.0.0.0" >> elasticsearch.yml
   when: production == true
 
-- name: is elasticsearch already running?
-  become: yes
-  become_user: root
-  shell: service elasticsearch status warn=false
-  register: elasticsearch_status
-  failed_when: elasticsearch_status.rc != 0 and ("unrecognized service" not in elasticsearch_status.stderr)
-  ignore_errors: true
-
 - name: Restart elasticsearch
   become: yes
   become_user: root
   service:
     name: elasticsearch
-    state: restarted
+    state: started
     enabled: true
-  when: "elasticsearch_status.rc != 0"

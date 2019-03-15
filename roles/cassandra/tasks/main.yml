@@ -40,18 +40,10 @@
     dest: /etc/cassandra/cassandra-rackdc.properties
     mode: 0755
 
-- name: Checking whether is cassandra already running?
-  become: yes
-  become_user: root
-  shell: service cassandra status warn=false
-  register: cassandra_status
-  failed_when: cassandra_status.rc != 0 and ("unrecognized service" not in cassandra_status.stderr)
-  ignore_errors: true
-
 - name: Restart cassandra
   become: yes
   become_user: root
   service:
     name: cassandra
-    state: restarted
-  when: "cassandra_status.rc != 0"
+    state: started
+    enabled: yes

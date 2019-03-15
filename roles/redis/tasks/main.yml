@@ -15,18 +15,10 @@
     dest: /etc/redis/redis.conf
     mode: 0755
 
-- name: is redis already running?
-  become: yes
-  become_user: root
-  shell: service redis status warn=false
-  register: redis_status
-  failed_when: redis_status.rc != 0 and ("unrecognized service" not in redis_status.stderr)
-  ignore_errors: true
-
 - name: Restart redis
   become: yes
   become_user: root
   service:
     name: redis
-    state: restarted
-  when: "redis_status.rc != 0"
+    state: started
+    enabled: yes
