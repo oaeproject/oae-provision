@@ -105,6 +105,12 @@
     group: oae
     owner: oae
 
+- name: Rebuild APIKEY file
+  shell: |
+    cd {{ etherpad_path }}
+    rm -rf APIKEY.txt
+    echo "{{ etherpad_apikey }}" >> APIKEY.txt
+
 - name: Install ep_headings module
   shell: |
     cd {{ etherpad_path }}
