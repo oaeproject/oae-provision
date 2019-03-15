@@ -61,6 +61,14 @@
     dest: /opt/Hilary
     version: master
 
+- name: Install 3akai-ux dependencies
+  shell: |
+    cd /opt/Hilary/3akai-ux && npm install --silent
+
+- name: Build the frontend
+  shell: |
+    cd /opt/Hilary/3akai-ux && npx grunt
+
 - name: Install Hilary dependencies
   shell: |
     cd /opt/Hilary && npm install --silent
