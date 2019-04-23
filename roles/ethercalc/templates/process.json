@@ -1,0 +1,23 @@
+{
+  "apps": [
+    {
+      "name": "Ethercalc",
+      "script": "app.js",
+      "cwd": "/opt/ethercalc",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production",
+        "REDIS_HOST": "{{ redis_host }}",
+        "REDIS_PORT": "{{ redis_port }}",
+        "RABBIT_HOST": "{{ mq_host }}",
+        "RABBIT_PORT": "{{ rabbitmq_port }}",
+        "RABBIT_EXCHANGE": "{{ rabbitmq_exchange }}"
+      },
+      "instances": 1,
+      "exec_mode": "cluster",
+      "log_file": "/var/log/ethercalc/ethercalclog",
+      "error_file": "/var/log/ethercalc/ethercalc-err.log",
+      "ignore_watch": ["test", ".git", "files", "*.log"]
+    }
+  ]
+}

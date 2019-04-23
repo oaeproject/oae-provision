@@ -7,10 +7,14 @@ def elastic_config(list):
 def etherpadify(list):
     return [ '{ host: ' + x + ', port: 9001 }' for x in list]
 
+def ethercalcify(list):
+    return [ '{ host: ' + x + ', port: 8000 }' for x in list]
+
 class FilterModule(object):
     def filters(self):
         return {
             'wrap': wrap,
             'elastic_config': elastic_config,
-            'etherpadify': etherpadify
+            'etherpadify': etherpadify,
+            'ethercalcify': ethercalcify
         }

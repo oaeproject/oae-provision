@@ -1,0 +1,103 @@
+---
+# tasks for ethercalc
+- name: Create ethercalc group
+  become: yes
+  become_user: root
+  group:
+    name: ethercalc
+    state: present
+
+- name: Create ethercalc user
+  become: yes
+  become_user: root
+  user:
+    name: ethercalc
+    groups: # Empty by default, here we give it some groups
+      - ethercalc
+    state: present
+
+- name: Create ethercalc root folder
+  become: yes
+  become_user: root
+  file:
+    path: "/opt"
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Create ethercalc dir
+  become: yes
+  become_user: root
+  file:
+    path: "{{ ethercalc_path }}"
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Create ethercalc log dir
+  become: yes
+  become_user: root
+  file:
+    path: "{{ ethercalc_path_log }}"
+    state: directory
+    owner: oae
+    group: oae
+
+- name: Check if ethercalc has been installed
+  stat:
+    path: "{{ ethercalc_path }}/app.js"
+  register: ethercalc_installed
+
+- name: Download ethercalc
+  git:
+    repo: "https://github.com/oaeproject/ethercalc.git"
+    depth: 2
+    force: yes
+    dest: /home/oae/ethercalc
+    version: master
+  when: ethercalc_installed.stat.exists == false
+
+- name: Set up ethercalc
+  become: yes
+  become_user: root
+  shell: |
+    mv /home/oae/ethercalc/* {{ ethercalc_path }}
+    chown oae:oae -R {{ ethercalc_path }}
+    chmod g+w -R {{ ethercalc_path }}
+  when: ethercalc_installed.stat.exists == false
+
+- name: Copy PM2 configuration to remote
+  template:
+    src: process.json
+    dest: /opt/ethercalc
+    mode: 0755
+
+- name: Install ethercalc dependencies
+  shell: |
+    cd {{ ethercalc_path }}
+    npm install
+  when: ethercalc_installed.stat.exists == false
+
+- name: Install PM2
+  become: yes
+  become_user: root
+  shell: |
+    npm i -g pm2
+
+- name: Run ethercalc
+  shell: |
+    cd {{ethercalc_path}}
+    pm2 startOrReload process.json
+
+- name: Save PM2 session
+  shell: |
+    cd {{ ethercalc_path }}
+    pm2 save
+
+- name: Make PM2 restart on boot
+  become: yes
+  become_user: root
+  shell: |
+    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u oae --hp /home/oae
+    systemctl enable pm2-oae
+

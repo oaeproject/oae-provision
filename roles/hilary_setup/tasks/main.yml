@@ -145,10 +145,9 @@
     printf "\n\nconfig.email.transport = {{email_transport}};"                             >> config.js
     # printf "\n\nconfig.email.sendmailTransport.path = \'%s\';"                           >> config.js
     # printf "\n\nconfig.email.smtpTransport = %O;"                                        >> config.js
-    # printf "\n\nconfig.etherpad.apikey = \'%s\';"                                        >> config.js
-    printf "\n\nconfig.etherpad.apikey = '{{ etherpad_apikey }}';"                       >> config.js
+    printf "\n\nconfig.etherpad.apikey = '{{ etherpad_apikey }}';"                         >> config.js
     printf "\n\nconfig.etherpad.hosts = [{{ etherpad_hosts }}];"                           >> config.js
-    # printf "\n\nconfig.ethercalc.host = \'%s\';"                                         >> config.js
+    printf "\n\nconfig.ethercalc.host = '[{{ ethercalc_hosts }}]';"                          >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
 
@@ -184,7 +183,7 @@
     export GOOGLE_CLIENT_ID=822036948319.apps.googleusercontent.com
     export GOOGLE_CLIENT_SECRET=b5ccr5noy0j_gzj4kj42uuwm
     export TMP="/opt/tmp"
-    pm2 startOrReload process.json 
+    pm2 startOrReload process.json
 
 - name: Save PM2 session
   shell: |
@@ -197,3 +196,4 @@
   shell: |
     env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u oae --hp /home/oae
     systemctl enable pm2-oae
+
