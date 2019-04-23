@@ -5,6 +5,7 @@
       "script": "app.js",
       "cwd": "/opt/Hilary",
       "watch": false,
+      "node_args": "-r esm",
       "env": {
         "NODE_ENV": "production"
       },
