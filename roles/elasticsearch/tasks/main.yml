@@ -35,7 +35,7 @@
   become_user: root
   shell: |
     cd /etc/elasticsearch
-    printf "network.host: 0.0.0.0" >> elasticsearch.yml
+    printf "\nnetwork.host: 0.0.0.0" >> elasticsearch.yml
   when: production == true
 
 - name: Restart elasticsearch
