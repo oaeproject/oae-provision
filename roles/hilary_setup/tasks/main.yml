@@ -147,7 +147,7 @@
     # printf "\n\nconfig.email.smtpTransport = %O;"                                        >> config.js
     printf "\n\nconfig.etherpad.apikey = '{{ etherpad_apikey }}';"                         >> config.js
     printf "\n\nconfig.etherpad.hosts = [{{ etherpad_hosts }}];"                           >> config.js
-    printf "\n\nconfig.ethercalc.host = [{{ ethercalc_hosts }}];"                          >> config.js
+    printf "\n\nconfig.ethercalc = [{{ ethercalc_hosts }}];"                          >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
 
