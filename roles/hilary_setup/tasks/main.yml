@@ -101,9 +101,13 @@
     dest: /opt/Hilary
     version: master
 
+- name: Install yarn
+  shell: |
+    curl -o- -L https://yarnpkg.com/install.sh | bash
+
 - name: Install 3akai-ux dependencies
   shell: |
-    cd /opt/Hilary/3akai-ux && npm install --silent
+    cd /opt/Hilary/3akai-ux && npx lerna bootstrap
 
 - name: Build the frontend
   shell: |
@@ -111,7 +115,7 @@
 
 - name: Install Hilary dependencies
   shell: |
-    cd /opt/Hilary && npm install --silent
+    cd /opt/Hilary && npx lerna bootstrap
 
 - name: Set Hilary configuration
   shell: |
@@ -154,7 +158,7 @@
 - name: Run migrations
   shell: |
     cd /opt/Hilary
-    npm run migrate
+    yarn run migrate
   run_once: true
 
 - name: Copy PM2 configuration to remote
@@ -171,7 +175,7 @@
   become: yes
   become_user: root
   shell: |
-    npm i -g pm2
+    yarn i -g pm2
 
 - name: Start (or reload) PM2
   shell: |

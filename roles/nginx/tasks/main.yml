@@ -26,7 +26,7 @@
 
 - name: Install 3akai-ux dependencies
   shell: |
-    cd /opt/Hilary/3akai-ux && npm install --silent
+    cd /opt/Hilary/3akai-ux && npx lerna bootstrap
 
 - name: Build the frontend
   shell: |
