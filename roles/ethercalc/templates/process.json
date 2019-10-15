@@ -8,10 +8,7 @@
       "env": {
         "NODE_ENV": "production",
         "REDIS_HOST": "{{ redis_host }}",
-        "REDIS_PORT": "{{ redis_port }}",
-        "RABBIT_HOST": "{{ mq_host }}",
-        "RABBIT_PORT": "{{ rabbitmq_port }}",
-        "RABBIT_EXCHANGE": "{{ rabbitmq_exchange }}"
+        "REDIS_PORT": "{{ redis_port }}"
       },
       "instances": 1,
       "exec_mode": "cluster",

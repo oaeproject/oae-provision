@@ -1,79 +1,103 @@
-[staging-web]
+#######################
+#
+# Experimental environment
+# (single server)
+#
+#######################
+
+[experimental-web]
 staging.oae.org # 192.168.38.93
 
-[staging-app]
+[experimental-app]
 staging.oae.org # 192.168.38.93
 
-[staging-mq]
+# [experimental-mq]
+# staging.oae.org # 192.168.38.93
+
+[experimental-cache]
 staging.oae.org # 192.168.38.93
 
-[staging-cache]
+[experimental-db]
 staging.oae.org # 192.168.38.93
 
-[staging-db]
+[experimental-etherpad]
 staging.oae.org # 192.168.38.93
 
-[staging-etherpad]
+[experimental-ethercalc]
 staging.oae.org # 192.168.38.93
 
-[staging-ethercalc]
+[experimental-search]
 staging.oae.org # 192.168.38.93
 
-[staging-search]
-staging.oae.org # 192.168.38.93
 
+#######################
+#
+# Staging environment
+# (multi server)
+#
+#######################
+
+# nginx server group
 [esup-web]
-staging.oae.org # 192.168.38.93
+nginx.staging.oae.org # 192.168.38.93
 
+# hilary server group
 [esup-app]
-hilary1.prod.oae.org # 192.168.38.94
-hilary2.prod.oae.org # 192.168.38.95
+hilary1.staging.oae.org # 192.168.38.94
+hilary2.staging.oae.org # 192.168.38.95
 
-[esup-mq]
-rabbit.prod.oae.org # 192.168.38.90
+# [esup-mq]
+# rabbit.staging.oae.org # 192.168.38.90
 
+# redis server group
 [esup-cache]
-redis.prod.oae.org # 192.168.38.91
+redis.staging.oae.org # 192.168.38.91
 
+# database server group
 [esup-db]
-cassandra1.prod.oae.org # 96
-cassandra2.prod.oae.org # 97
-cassandra3.prod.oae.org # 98
+cassandra1.staging.oae.org # 96
+cassandra2.staging.oae.org # 97
+cassandra3.staging.oae.org # 98
 
+# etherpad server group
 [esup-etherpad]
-etherpad1.prod.oae.org # 192.168.38.92
-etherpad2.prod.oae.org # 192.168.38.101
+etherpad1.staging.oae.org # 192.168.38.92
+etherpad2.staging.oae.org # 192.168.38.101
 
+# ethercalc server group
 [esup-ethercalc]
-etherpad1.prod.oae.org # 192.168.38.92
-etherpad2.prod.oae.org # 192.168.38.101
+etherpad1.staging.oae.org # 192.168.38.92
+etherpad2.staging.oae.org # 192.168.38.101
 
+# elasticsearch server group
 [esup-search]
-elastic1.prod.oae.org # 192.168.38.102
-elastic2.prod.oae.org # 192.168.38.103
+elastic1.staging.oae.org # 192.168.38.102
+# elastic2.staging.oae.org # 192.168.38.103
 
+# nfs client server group
 [esup-nfs-client]
-hilary1.prod.oae.org # 192.168.38.94
-hilary2.prod.oae.org # 192.168.38.95
+hilary1.staging.oae.org # 192.168.38.94
+hilary2.staging.oae.org # 192.168.38.95
 staging.oae.org # 192.168.38.93
 
+# nfs server server group
 [esup-nfs-server]
-nfs.prod.oae.org # 192.168.38.93
+nfs.staging.oae.org # 192.168.38.93
 
-[staging:children]
-staging-web
-staging-app
-staging-mq
-staging-cache
-staging-db
-staging-ethercalc
-staging-etherpad
-staging-search
+[experimental:children]
+experimental-web
+experimental-app
+# experimental-mq
+experimental-cache
+experimental-db
+experimental-ethercalc
+experimental-etherpad
+experimental-search
 
 [esup:children]
 esup-web
 esup-app
-esup-mq
+# esup-mq
 esup-cache
 esup-db
 esup-etherpad

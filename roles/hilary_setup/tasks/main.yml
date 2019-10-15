@@ -101,10 +101,6 @@
     dest: /opt/Hilary
     version: master
 
-- name: Install yarn
-  shell: |
-    curl -o- -L https://yarnpkg.com/install.sh | bash
-
 - name: Install 3akai-ux dependencies
   shell: |
     cd /opt/Hilary/3akai-ux && npx lerna bootstrap
@@ -136,9 +132,9 @@
     printf "\n\nconfig.files.uploadDir = {{files_uploadDir}};"                             >> config.js
     printf "\n\nconfig.files.localStorageDirectory = {{files_localStorageDir}};"           >> config.js
     printf "\n\nconfig.cookie.secret = {{cookie_secret}};"                                 >> config.js
-    printf "\n\nconfig.search.hosts = [ {{ search_hosts }} ];" >> config.js
+    printf "\n\nconfig.search.hosts = [ {{ search_hosts }} ];"                             >> config.js
     printf "\n\nconfig.search.index.destroyOnStartup = {{search_destroy}};"                >> config.js
-    printf "\n\nconfig.mq.connection.host = [ {{ mq_hosts }} ];"                           >> config.js
+    printf "\n\nconfig.mq.host = {{ redis_hosts }};"                                       >> config.js
     printf "\n\nconfig.previews.tmpDir = {{previews_tmpDir}};"                             >> config.js
     printf "\n\nconfig.signing.key = {{signing_key}};"                                     >> config.js
     printf "\n\nconfig.email.debug = {{email_debug}};"                                     >> config.js
@@ -151,7 +147,7 @@
     # printf "\n\nconfig.email.smtpTransport = %O;"                                        >> config.js
     printf "\n\nconfig.etherpad.apikey = '{{ etherpad_apikey }}';"                         >> config.js
     printf "\n\nconfig.etherpad.hosts = [{{ etherpad_hosts }}];"                           >> config.js
-    printf "\n\nconfig.ethercalc = [{{ ethercalc_hosts }}];"                          >> config.js
+    printf "\n\nconfig.ethercalc = [{{ ethercalc_hosts }}];"                               >> config.js
     printf "\n\nconfig.previews.enabled = {{previews_enabled}};"                           >> config.js
     printf "\n\nconfig.previews.credentials.password = {{previews_credentials_password}};" >> config.js
 
@@ -175,7 +171,7 @@
   become: yes
   become_user: root
   shell: |
-    yarn i -g pm2
+    yarn global add pm2
 
 - name: Start (or reload) PM2
   shell: |

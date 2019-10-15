@@ -1,35 +1,29 @@
-- hosts: staging-db
+- hosts: experimental-db
   roles:
     - cassandra
   tags:
     - cassandra
 
-- hosts: staging-mq
-  roles:
-    - rabbitmq
-  tags:
-    - rabbitmq
-
-- hosts: staging-etherpad
+- hosts: experimental-etherpad
   roles:
     - node
     - etherpad
   tags:
     - etherpad
 
-- hosts: staging-cache
+- hosts: experimental-cache
   roles:
     - redis
   tags:
     - redis
 
-- hosts: staging-search
+- hosts: experimental-search
   roles:
     - elasticsearch
   tags:
     - elasticsearch
 
-- hosts: staging-app
+- hosts: experimental-app
   roles:
     - node
     - hilary_setup
@@ -38,7 +32,7 @@
 
   remote_user: oae
 
-- hosts: staging-web
+- hosts: experimental-web
   roles:
     - nginx
   tags:

@@ -25,3 +25,36 @@
     name: nodejs
     state: present
   when: node_installed.rc != 0 or (node_installed.rc == 0 and node_installed.stdout != node_version)
+
+- name: Add Yarn keys
+  become: yes
+  become_user: root
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: Ensure Debian sources list file exists
+  become: yes
+  become_user: root
+  file:
+    path: /etc/apt/sources.list.d/yarn.list
+    owner: root
+    mode: 0644
+    state: touch
+
+- name: Ensure Yarn package is in sources list
+  become: yes
+  become_user: root
+  lineinfile:
+    dest: /etc/apt/sources.list.d/yarn.list
+    regexp: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    line: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    state: present
+
+- name: Install Yarn
+  become: yes
+  become_user: root
+  apt:
+    update_cache: yes
+    name: yarn
+    state: present
