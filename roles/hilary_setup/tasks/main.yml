@@ -194,6 +194,6 @@
   become: yes
   become_user: root
   shell: |
-    env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u oae --hp /home/oae
+    sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u oae --hp /home/oae
     systemctl enable pm2-oae
 
