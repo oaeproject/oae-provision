@@ -88,9 +88,9 @@
     state: present
     update_cache: true
 
-- name: Download PPA
+- name: Download PPA and Install nodejs
   shell: |
-    curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
   when: node_installed.rc != 0 or (node_installed.rc == 0 and node_installed.stdout != node_version)
 
 - name: Clone the repo
