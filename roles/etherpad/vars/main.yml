@@ -3,8 +3,6 @@
 etherpad_version: "1.6.3"
 etherpad_path: "/opt/etherpad"
 etherpad_path_log: "/var/log/etherpad"
-cassandra_keyspace: "oae"
-cassandra_replication_factor: 1
 
 # not yet being used
 etherpad_user: oae

@@ -151,12 +151,6 @@
     pip install thrift==0.9.3
   when: etherpad_installed.stat.exists == false
 
-- name: Initilize keyspace
-  shell: |
-    echo "CREATE KEYSPACE IF NOT EXISTS \"{{ cassandra_keyspace }}\" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': {{ cassandra_replication_factor }} };" >> {{ etherpad_path }}/init.cql
-    cqlsh -f {{ etherpad_path }}/init.cql {{ cassandra_hosts | first }} 9160
-  run_once: true
-
 - name: Rebuild APIKEY file
   shell: |
     rm -rf {{ etherpad_path }}/APIKEY.txt

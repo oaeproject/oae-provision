@@ -5,3 +5,6 @@ cassandra_apt_repository: "deb http://www.apache.org/dist/cassandra/debian 21x m
 
 # for production only
 cluster_name: Test Cluster
+home_path: "/home/oae"
+cassandra_keyspace: "oae"
+cassandra_replication_factor: 1

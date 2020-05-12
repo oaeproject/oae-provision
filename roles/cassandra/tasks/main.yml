@@ -47,3 +47,11 @@
     name: cassandra
     state: started
     enabled: yes
+
+- name: Initilize keyspace
+  run_once: true
+  shell: |
+    sleep 15
+    echo "CREATE KEYSPACE IF NOT EXISTS \"{{ cassandra_keyspace }}\" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': {{ cassandra_replication_factor }} };" >> {{ home_path }}/init.cql
+    cqlsh -f {{ home_path }}/init.cql {{ cassandra_hosts | first }}
+
