@@ -41,7 +41,7 @@
       - libreoffice-core
       - libreoffice-base-core
       - libreoffice-writer
-      - graphicsmagick
+      - libvips42
       - poppler-utils
       - openjdk-8-jre-headless
       - build-essential
