@@ -1,5 +1,7 @@
 # OAE provision and deploy instructions
 
+STATUS: Currently only multi-server setup is properly configured. Single-server installation is not.
+
 ## Requirements
 
 - Node (tested with 10.15.1)
@@ -18,6 +20,14 @@ For staging, use the `esup.yml` file as follows:
 ```
 ansible-playbook -i hosts esup.yml --ask-become-pass && say "finished deploying"
 ```
+
+If you want to run just a specific set of tasks, use tags like this:
+
+```
+ansible-playbook -i hosts esup.yml --ask-become-pass --tags cassandra && say "finished deploying"
+```
+
+Check out the tags on the main config file (such as `esup.yml`.
 
 ## Before you deploy
 
@@ -38,3 +48,14 @@ Sometimes you'll see this too:
 Don't forget to change this as well as the `production` flag often means that you're setting up a multi-server environment. For elasticsearch and redis that means that we're making them exposed the remote connections by adding special configuration on the fly.
 
 All in all, make sure you understand and review every variable in every `vars/main.yml` file before using this.
+
+## Upgrading node
+
+If you need to update the node version on the hilaryX target machines, follow this:
+
+```
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+This works for node 12, but you can check the instructions for other versions [here](https://github.com/nodesource/distributions/blob/master/README.md)
