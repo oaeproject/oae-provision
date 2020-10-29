@@ -24,7 +24,7 @@ ansible-playbook -i hosts esup.yml --ask-become-pass && say "finished deploying"
 If you want to run just a specific set of tasks, use tags like this:
 
 ```
-ansible-playbook -i hosts esup.yml --ask-become-pass --tags cassandra && say "finished deploying"
+ansible-playbook -i hosts esup.yml --ask-become-pass --tags=cassandra && say "finished deploying"
 ```
 
 Check out the tags on the main config file (such as `esup.yml`).
