@@ -1,29 +1,55 @@
 - hosts: experimental-db
+  vars:
+    - production: false
+    - cassandra_hosts: "{{ groups['experimental-db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
   roles:
     - cassandra
   tags:
     - cassandra
 
 - hosts: experimental-etherpad
+  vars:
+    - redis_host: "{{ groups['experimental-cache'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list | random }}"
+    - cassandra_hosts: "{{ groups['experimental-db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
   roles:
     - node
     - etherpad
   tags:
     - etherpad
 
+- hosts: experimental-ethercalc
+  vars:
+    - redis_host: "{{ groups['experimental-cache'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list | random }}"
+  roles:
+    - node
+    - ethercalc
+  tags:
+    - ethercalc
+
 - hosts: experimental-cache
+  vars:
+    - production: false
   roles:
     - redis
   tags:
     - redis
 
 - hosts: experimental-search
+  vars:
+    - production: false
   roles:
     - elasticsearch
   tags:
     - elasticsearch
 
 - hosts: experimental-app
+  vars:
+    - search_hosts: "{{ groups['experimental-search'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | wrap | elastic_config | join(', ')}}"
+    - redis_hosts: "{{ groups['experimental-cache'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | wrap | join(',') }}"
+    - cassandra_hosts: "{{ groups['experimental-db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | wrap | join(',') }}"
+    - nginx_host: "{{ groups['experimental-web'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list | random }}"
+    - etherpad_hosts: "{{ groups['experimental-etherpad'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | wrap | etherpadify | join(', ')}}"
+    - ethercalc_hosts: "{{ groups['experimental-ethercalc'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | wrap | ethercalcify | join(', ')}}"
   roles:
     - node
     - hilary_setup
@@ -33,6 +59,11 @@
   remote_user: oae
 
 - hosts: experimental-web
+  vars:
+    - create_cert: true
+    - hilary_hosts: "{{ groups['experimental-app'] }}"
+    - etherpad_hosts: "{{ groups['experimental-etherpad'] }}"
+    - ethercalc_hosts: "{{ groups['experimental-ethercalc'] }}"
   roles:
     - nginx
   tags:
