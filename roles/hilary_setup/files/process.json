@@ -9,8 +9,6 @@
       "env": {
         "NODE_ENV": "production"
       },
-      "instances": 2,
-      "exec_mode": "cluster",
       "log_file": "/var/log/Hilary/hilary.log",
       "error_file": "/var/log/Hilary/hilary-err.log",
       "ignore_watch": ["test", ".git", "files", "*.log"]
