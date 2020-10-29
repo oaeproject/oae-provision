@@ -8,3 +8,4 @@ etherpad_path_log: "/var/log/etherpad"
 etherpad_user: oae
 etherpad_group: oae
 cassandra_port: 9160
+cassandra_keyspace: "oae"
