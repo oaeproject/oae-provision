@@ -5,7 +5,7 @@
   become_user: root
   apt:
     name:
-      - openjdk-8-jre-headless
+      - openjdk-11-jre-headless
     state: present
     update_cache: true
 
@@ -19,7 +19,7 @@
 
 - name: Download elasticsearch
   get_url:
-    url: https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.deb
+    url: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.3-amd64.deb
     dest: /home/oae/
   when: elastic_installed.rc == 1
 
@@ -27,7 +27,7 @@
   become: yes
   become_user: root
   apt:
-    deb: elasticsearch-1.7.6.deb
+    deb: elasticsearch-7.9.3-amd64.deb
   when: elastic_installed.rc == 1
 
 - name: Set elasticsearch configuration
