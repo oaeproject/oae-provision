@@ -9,13 +9,15 @@ STATUS: Currently only multi-server setup is properly configured. Single-server 
 
 ## Usage
 
+The `esup.yml` file mentioned below is not available publicly. It is specific to ESUP Portail deployment setup.
+
 First, be sure to look at the `hosts` file and make sure you have it adapted to your environment. This includes all the hostnames for staging and production.
 
 However, there are different settings one must adapt for each environment.
 
 For experimental, run `ansible-playbook -i hosts oae.yml --ask-become-pass -v && say "finished deploying"` and it will ask for the sudo password. The `say` command is optional, of course.
 
-For staging, use the `esup.yml` file as follows:
+For staging, use the correspondent configuration setup file. In the case that file is `esup.yml`, then run the following:
 
 ```
 ansible-playbook -i hosts esup.yml --ask-become-pass && say "finished deploying"
@@ -27,7 +29,7 @@ If you want to run just a specific set of tasks, use tags like this:
 ansible-playbook -i hosts esup.yml --ask-become-pass --tags=cassandra && say "finished deploying"
 ```
 
-Check out the tags on the main config file (such as `esup.yml`).
+Check out the tags on the config file (such as `esup.yml`).
 
 ## Before you deploy
 
