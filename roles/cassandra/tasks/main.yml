@@ -4,7 +4,7 @@
   become_user: root
   apt_key:
     url: https://www.apache.org/dist/cassandra/KEYS
-    id: A278B781FE4B2BDA
+    id: E91335D77E3E87CB
     state: present
   register: add_repository_key
   ignore_errors: "{{ cassandra_apt_ignore_key_error }}"
