@@ -23,6 +23,12 @@ For staging, use the correspondent configuration setup file. In the case that fi
 ansible-playbook -i hosts esup.yml --ask-become-pass && say "finished deploying"
 ```
 
+if you want to run ansible with a specific user
+
+```
+ansible-playbook -i hosts esup.yml --ask-become-pass --user oae && say "finished deploying"
+```
+
 If you want to run just a specific set of tasks, use tags like this:
 
 ```
