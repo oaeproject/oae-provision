@@ -145,7 +145,7 @@
 
 - name: Install 3akai-ux dependencies
   shell: |
-    cd /opt/Hilary/3akai-ux && npx lerna bootstrap
+    cd /opt/Hilary/3akai-ux && yarn install
 
 - name: Build the frontend
   shell: |
@@ -153,7 +153,7 @@
 
 - name: Install Hilary dependencies
   shell: |
-    cd /opt/Hilary && npx lerna bootstrap
+    cd /opt/Hilary && yarn install
 
 - name: Set Hilary configuration
   shell: |
@@ -238,4 +238,3 @@
   shell: |
     env PATH=$PATH:/usr/bin pm2 startup systemd -u oae --hp /home/oae
     systemctl enable pm2-oae
-
