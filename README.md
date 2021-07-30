@@ -1,4 +1,6 @@
 # OAE provision and deploy instructions
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foaeproject%2Foae-provision.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Foaeproject%2Foae-provision?ref=badge_shield)
+
 
 STATUS: Currently only multi-server setup is properly configured. Single-server installation is not.
 
@@ -71,3 +73,7 @@ This works for node 12, but you can check the instructions for other versions [h
 ## Bugs and missing features
 
 There is this one issue with PM2 currently preventing from using cluster mode with ESM (link [here](https://github.com/standard-things/esm/issues/861)). For now we need to use fork mode or just one instance.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Foaeproject%2Foae-provision.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Foaeproject%2Foae-provision?ref=badge_large)
